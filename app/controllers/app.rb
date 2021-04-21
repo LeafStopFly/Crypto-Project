@@ -12,7 +12,7 @@ module Internship
     plugin :halt
 
     configure do
-      Document.setup
+      Post.setup
     end
 
     route do |routing| # rubocop:disable Metrics/BlockLength
