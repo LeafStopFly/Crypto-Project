@@ -4,7 +4,7 @@ require 'json'
 require 'base64'
 require 'rbnacl'
 
-module Credence
+module Internship
   STORE_DIR = 'app/db/store'
 
   # Holds a full secret post
@@ -34,24 +34,24 @@ module Credence
 
     # File store must be setup once when application runs
     def self.setup
-      Dir.mkdir(Credence::STORE_DIR) unless Dir.exist? Credence::STORE_DIR
+      Dir.mkdir(Internship::STORE_DIR) unless Dir.exist? Internship::STORE_DIR
     end
 
     # Stores post in file store
     def save
-      File.write("#{Credence::STORE_DIR}/#{id}.txt", to_json)
+      File.write("#{Internship::STORE_DIR}/#{id}.txt", to_json)
     end
 
     # Query method to find one post
     def self.find(find_id)
-      post_file = File.read("#{Credence::STORE_DIR}/#{find_id}.txt")
+      post_file = File.read("#{Internship::STORE_DIR}/#{find_id}.txt")
       post.new JSON.parse(post_file)
     end
 
     # Query method to retrieve index of all posts
     def self.all
-      Dir.glob("#{Credence::STORE_DIR}/*.txt").map do |file|
-        file.match(%r{#{Regexp.quote(Credence::STORE_DIR)}\/(.*)\.txt})[1]
+      Dir.glob("#{Internship::STORE_DIR}/*.txt").map do |file|
+        file.match(%r{#{Regexp.quote(Internship::STORE_DIR)}\/(.*)\.txt})[1]
       end
     end
 
