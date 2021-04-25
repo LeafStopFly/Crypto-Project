@@ -4,7 +4,7 @@ require 'json'
 require 'sequel'
 
 module ISSInternship
-  # Models a project
+  # Models a interview
   class Interview < Sequel::Model
     many_to_one :companines
 

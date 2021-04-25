@@ -33,7 +33,6 @@ describe 'Test Company Handling' do
     _(result['data']['attributes']['name']).must_equal existing_comp['name']
     _(result['data']['attributes']['location']).must_equal existing_comp['location']
     _(result['data']['attributes']['type']).must_equal existing_comp['type']
-
   end
 
   it 'SAD: should return error if unknown company requested' do
@@ -58,6 +57,5 @@ describe 'Test Company Handling' do
     _(created['name']).must_equal existing_comp['name']
     _(created['location']).must_equal existing_comp['location']
     _(created['type']).must_equal existing_comp['type']
-
   end
 end
