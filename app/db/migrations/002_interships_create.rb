@@ -17,7 +17,7 @@ Sequel.migration do
       String :reactionary, null: false
       String :recruit_source
       Float :rating, null: false
-      String :ISS_module
+      String :iss_module
 
       DateTime :created_at
       DateTime :updated_at

@@ -18,7 +18,7 @@ Sequel.migration do
       String :description, null: false
       String :waiting_result_time
       String :advice
-      String :ISS_module
+      String :iss_module
 
       DateTime :created_at
       DateTime :updated_at
