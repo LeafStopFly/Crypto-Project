@@ -11,7 +11,7 @@ Sequel.migration do
       String :position, null:false
       String :time, null: false
       String :interview_location, null: false
-      Float :level, null: false
+      String :level, null: false
       String :recruit_source
       Float :rating, null: false
       String :result, null: false

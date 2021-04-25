@@ -2,7 +2,7 @@
 
 require_relative './spec_helper'
 
-describe 'Test Document Handling' do
+describe 'Test Internship Handling' do
   include Rack::Test::Methods
 
   before do
@@ -19,7 +19,7 @@ describe 'Test Document Handling' do
       comp.add_internship(intern)
     end
 
-    get "api/v1/companies/#{proj.id}/internships"
+    get "api/v1/companies/#{comp.id}/internships"
     _(last_response.status).must_equal 200
 
     result = JSON.parse last_response.body
@@ -44,11 +44,11 @@ describe 'Test Document Handling' do
     _(result['data']['attributes']['reactionary']).must_equal intern_data['reactionary']
     _(result['data']['attributes']['recruit_source']).must_equal intern_data['recruit_source']
     _(result['data']['attributes']['rating']).must_equal intern_data['rating']
-    _(result['data']['attributes']['ISS_module']).must_equal intern_data['ISS_module']
+    _(result['data']['attributes']['iss_module']).must_equal intern_data['iss_module']
   end
 
   it 'SAD: should return error if unknown internship requested' do
-    proj = ISSInternship::Company.first
+    comp = ISSInternship::Company.first
     get "/api/v1/companies/#{comp.id}/internships/foobar"
 
     _(last_response.status).must_equal 404

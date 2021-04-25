@@ -6,8 +6,7 @@ require 'sequel'
 module ISSInternship
   # Models a project
   class Interview < Sequel::Model
-    many_to_many :companines
-    plugin :association_dependencies, documents: :destroy
+    many_to_one :companines
 
     plugin :timestamps
 

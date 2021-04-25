@@ -1,4 +1,6 @@
 # frozen_string_literal: true
 
-require './app/controllers/app'
-run ISSInternship::Api.freeze.
+require './require_app'
+require_app
+
+run ISSInternship::Api.freeze.app
