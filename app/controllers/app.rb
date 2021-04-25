@@ -3,7 +3,6 @@
 require 'roda'
 require 'json'
 
-
 module ISSInternship
   # Web controller for Internship API
   class Api < Roda
@@ -47,7 +46,7 @@ module ISSInternship
                 new_data = JSON.parse(routing.body.read)
                 company = Company.first(id: company_id)
                 new_internship = company.add_internship(new_data)
-                
+
                 if new_internship
                   response.status = 201
                   response['Location'] = "#{@internship_route}/#{new_internship.id}"
@@ -60,7 +59,7 @@ module ISSInternship
                 routing.halt 500, { message: 'Database error' }.to_json
               end
             end
-            
+
             routing.on 'interviews' do
               @interview_route = "#{@api_root}/companies/#{company_id}/interviews"
 

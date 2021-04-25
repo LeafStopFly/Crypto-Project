@@ -47,7 +47,6 @@ describe 'Test Interview Handling' do
     _(result['data']['attributes']['waiting_result_time']).must_equal interv_data['waiting_result_time']
     _(result['data']['attributes']['advice']).must_equal interv_data['advice']
     _(result['data']['attributes']['iss_module']).must_equal interv_data['iss_module']
-
   end
 
   it 'SAD: should return error if unknown interview requested' do
