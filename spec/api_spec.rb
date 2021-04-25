@@ -9,7 +9,7 @@ require_relative '../app/controllers/app'
 require_relative '../app/models/post'
 
 def app
-  Internship::Api
+  ISSInternship::Api
 end
 
 DATA = YAML.safe_load File.read('app/db/seeds/post_seeds.yml')
@@ -19,7 +19,7 @@ describe 'Test Internship Web API' do
 
   before do
     # Wipe database before each test
-    Dir.glob("#{Internship::STORE_DIR}/*.txt").each { |postname| FileUtils.rm(postname) }
+    Dir.glob("#{ISSInternship::STORE_DIR}/*.txt").each { |postname| FileUtils.rm(postname) }
   end
 
   it 'should find the root route' do
@@ -29,8 +29,8 @@ describe 'Test Internship Web API' do
 
   describe 'Handle posts' do
     it 'HAPPY: should be able to get list of all [posts]' do
-      Internship::Post.new(DATA[0]).save
-      Internship::Post.new(DATA[1]).save
+      ISSInternship::Post.new(DATA[0]).save
+      ISSInternship::Post.new(DATA[1]).save
 
       get 'api/v1/posts'
       result = JSON.parse last_response.body

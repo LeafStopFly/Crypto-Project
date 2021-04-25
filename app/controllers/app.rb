@@ -5,7 +5,7 @@ require 'json'
 
 require_relative '../models/post'
 
-module Internship
+module ISSInternship
   # Web controller for Internship API
   class Api < Roda
     plugin :environments

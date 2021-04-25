@@ -44,7 +44,7 @@ namespace :db do
   require 'sequel'
 
   Sequel.extension :migration
-  app = Internship::Api
+  app = ISSInternship::Api
 
   desc 'Run migrations'
   task :migrate => :print_env do
