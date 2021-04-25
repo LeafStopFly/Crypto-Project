@@ -1,0 +1,24 @@
+---
+- position: 'IT實習生'
+  time: '109.05'
+  interview_location: '線上面試'
+  level: '超難'
+  recruit_source: '104'
+  rating: 3
+  result: '沒上'
+  description: '問題很多，要考試'
+  waiting_result_time: '無聲卡'
+  advice: '別去'
+  iss_module: '資訊系統'
+
+- position: 'UIUX實習生'
+  time: '109.05'
+  interview_location: '台北'
+  level: '易'
+  recruit_source: '1111人力銀行'
+  rating: 4.5
+  result: '過了'
+  description: '很輕鬆的對話'
+  waiting_result_time: '3-5天'
+  advice: nil
+  iss_module: '服務設計與創新'

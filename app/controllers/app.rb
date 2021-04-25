@@ -3,17 +3,10 @@
 require 'roda'
 require 'json'
 
-require_relative '../models/post'
-
-module Internship
+module ISSInternship
   # Web controller for Internship API
   class Api < Roda
-    plugin :environments
     plugin :halt
-
-    configure do
-      Post.setup
-    end
 
     route do |routing| # rubocop:disable Metrics/BlockLength
       response['Content-Type'] = 'application/json'
@@ -23,36 +16,117 @@ module Internship
         { message: 'ISS InternshipAPI up at /api/v1' }.to_json
       end
 
-      routing.on 'api' do
-        routing.on 'v1' do
-          routing.on 'posts' do
-            # GET api/v1/posts/[id]
-            routing.get String do |id|
-              response.status = 200
-              Post.find(id).to_json
-            rescue StandardError
-              routing.halt 404, { message: 'Post not found' }.to_json
-            end
+      @api_root = 'api/v1'
+      routing.on @api_root do
+        routing.on 'companies' do
+          @comp_route = "#{@api_root}/companies"
 
-            # GET api/v1/posts
-            routing.get do
-              response.status = 200
-              output = { post_ids: Post.all }
-              JSON.pretty_generate(output)
-            end
+          routing.on String do |company_id|
+            routing.on 'internships' do
+              @internship_route = "#{@api_root}/companies/#{company_id}/internships"
 
-            # POST api/v1/posts
-            routing.post do
-              new_data = JSON.parse(routing.body.read)
-              new_post = Post.new(new_data)
+              # GET api/v1/companies/[company_id]/internships/[internship_id]
+              routing.get String do |internship_id|
+                internship_post = Internship.where(company_id: company_id, id: internship_id).first
+                internship_post ? internship_post.to_json : raise('internship post not found')
+              rescue StandardError => e
+                routing.halt 404, { message: e.message }.to_json
+              end
 
-              if new_post.save
-                response.status = 201
-                { message: 'Post saved', id: new_post.id }.to_json
-              else
-                routing.halt 400, { message: 'Could not save post' }.to_json
+              # GET api/v1/companies/[company_id]/internships
+              routing.get do
+                output = { data: Company.first(id: company_id).internships }
+                JSON.pretty_generate(output)
+              rescue StandardError
+                routing.halt 404, message: 'Could not find internship posts'
+              end
+
+              # POST api/v1/companies/[company_id]/internships
+              routing.post do
+                new_data = JSON.parse(routing.body.read)
+                company = Company.first(id: company_id)
+                new_internship = company.add_internship(new_data)
+
+                if new_internship
+                  response.status = 201
+                  response['Location'] = "#{@internship_route}/#{new_internship.id}"
+                  { message: 'Internship Post saved', data: new_internship }.to_json
+                else
+                  routing.halt 400, 'Could not save internship post'
+                end
+
+              rescue StandardError
+                routing.halt 500, { message: 'Database error' }.to_json
               end
             end
+
+            routing.on 'interviews' do
+              @interview_route = "#{@api_root}/companies/#{company_id}/interviews"
+
+              # GET api/v1/companies/[company_id]/interviews/[interview_id]
+              routing.get String do |interview_id|
+                interview_post = Interview.where(company_id: company_id, id: interview_id).first
+                interview_post ? interview_post.to_json : raise('interview post not found')
+              rescue StandardError => e
+                routing.halt 404, { message: e.message }.to_json
+              end
+
+              # GET api/v1/companies/[company_id]/interviews
+              routing.get do
+                output = { data: Company.first(id: company_id).interviews }
+                JSON.pretty_generate(output)
+              rescue StandardError
+                routing.halt 404, message: 'Could not find interview posts'
+              end
+
+              # POST api/v1/companies/[company_id]/interviews
+              routing.post do
+                new_data = JSON.parse(routing.body.read)
+                company = Company.first(id: company_id)
+                new_interview = company.add_interview(new_data)
+
+                if new_interview
+                  response.status = 201
+                  response['Location'] = "#{@interview_route}/#{new_interview.id}"
+                  { message: 'Interview Post saved', data: new_interview }.to_json
+                else
+                  routing.halt 400, 'Could not save interview post'
+                end
+
+              rescue StandardError
+                routing.halt 500, { message: 'Database error' }.to_json
+              end
+            end
+
+            # GET api/v1/companies/[company_id]
+            routing.get do
+              company = Company.first(id: company_id)
+              company ? company.to_json : raise('Company not found')
+            rescue StandardError => e
+              routing.halt 404, { message: e.message }.to_json
+            end
+          end
+
+          # GET api/v1/companies
+          routing.get do
+            output = { data: Company.all }
+            JSON.pretty_generate(output)
+          rescue StandardError
+            routing.halt 404, { message: 'Could not find companies' }.to_json
+          end
+
+          # POST api/v1/companies
+          routing.post do
+            new_data = JSON.parse(routing.body.read)
+            new_company = Company.new(new_data)
+
+            raise('Could not save company') unless new_company.save
+
+            response.status = 201
+            response['Location'] = "#{@company_route}/#{new_company.id}"
+            { message: 'Company saved', data: new_company }.to_json
+          rescue StandardError => e
+            routing.halt 400, { message: e.message }.to_json
           end
         end
       end

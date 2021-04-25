@@ -1,0 +1,22 @@
+---
+- title: '我在台積電的日子'
+  position: 'IT實習生'
+  year: '109'
+  period: '暑期'
+  job_description: '我在學習晶圓代工的相關知識'
+  salary: '月薪 36,000'
+  reactionary: '錢太少了'
+  recruit_source: '104'
+  rating: 4.5
+  iss_module: '資訊系統'
+  
+- title: '我在hp的日子'
+  position: '軟體工程實習生'
+  year: '110'
+  period: '暑期'
+  job_description: '我在學習軟體相關知識'
+  salary: nil
+  reactionary: '讚讚'
+  recruit_source: 'Linkedin'
+  rating: 4
+  iss_module: nil
