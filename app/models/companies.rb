@@ -8,7 +8,7 @@ module ISSInternship
   class Company < Sequel::Model
     one_to_many :internships
     one_to_many :interviews
-    plugin :association_dependencies, documents: :destroy
+    plugin :association_dependencies, internships: :destroy, interviews: :destroy
 
     plugin :timestamps
 

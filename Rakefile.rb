@@ -54,8 +54,9 @@ namespace :db do
 
   desc 'Delete database'
   task :delete do
-    app.DB[:documents].delete
-    app.DB[:projects].delete
+    app.DB[:interviews].delete
+    app.DB[:internships].delete
+    app.DB[:companies].delete
   end
 
   desc 'Delete dev or test database file'
@@ -65,7 +66,7 @@ namespace :db do
       return
     end
 
-    db_filename = "app/db/store/#{Internship::Api.environment}.db"
+    db_filename = "app/db/store/#{ISSInternship::Api.environment}.db"
     FileUtils.rm(db_filename)
     puts "Deleted #{db_filename}"
   end
