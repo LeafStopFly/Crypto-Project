@@ -16,19 +16,20 @@ module ISSInternship
       JSON(
         {
           data: {
-            type: 'internship',
+            type: 'interview',
             attributes: {
               id: id,
-              title: title,
               position: position,
-              year: year,
-              period: period,
-              job_description: job_description,
-              salary: salary,
-              reactionary: reactionary,
+              time: time,
+              interview_location: interview_location,
+              level: level,
               recruit_source: recruit_source,
               rating: rating,
-              ISS_module: iss_module
+              result: result,
+              description: description,
+              waiting_result_time: waiting_result_time,
+              advice: advice,
+              iss_module: iss_module
             }
           }
         }, options
