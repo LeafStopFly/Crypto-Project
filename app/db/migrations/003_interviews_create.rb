@@ -5,19 +5,19 @@ require 'sequel'
 Sequel.migration do
   change do
     create_table(:interviews) do
-      primary_key :id
+      uuid :id, primary_key: true
       foreign_key :company_id, table: :companies
 
-      String :position, null:false
+      String :position, null: false
       String :time, null: false
       String :interview_location, null: false
       String :level, null: false
       String :recruit_source
       Float :rating, null: false
       String :result, null: false
-      String :description, null: false
+      String :description_secure, null: false
       String :waiting_result_time
-      String :advice
+      String :advice_secure
       String :iss_module
 
       DateTime :created_at

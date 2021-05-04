@@ -11,6 +11,8 @@ module ISSInternship
     plugin :association_dependencies, internships: :destroy, interviews: :destroy
 
     plugin :timestamps
+    plugin :whitelist_security
+    set_allowed_columns :name, :location, :type
 
     # rubocop:disable Metrics/MethodLength
     def to_json(options = {})
