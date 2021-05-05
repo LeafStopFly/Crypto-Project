@@ -1,8 +1,10 @@
 ---
-- name: 'TSMC'
-  location: '新竹市'
+- company_no: '12345678'
+  name: 'TSMC'
+  address: '新竹市'
   type: '電子工業'
   
-- name: 'UMC'
-  location: '新竹市'
+- company_no: '87654321'
+  name: 'UMC'
+  address: '新竹市'
   type: '電子工業'

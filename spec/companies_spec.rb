@@ -30,8 +30,9 @@ describe 'Test Company Handling' do
 
     result = JSON.parse last_response.body
     _(result['data']['attributes']['id']).must_equal id
+    _(result['data']['attributes']['company_no']).must_equal existing_comp['company_no']
     _(result['data']['attributes']['name']).must_equal existing_comp['name']
-    _(result['data']['attributes']['location']).must_equal existing_comp['location']
+    _(result['data']['attributes']['address']).must_equal existing_comp['address']
     _(result['data']['attributes']['type']).must_equal existing_comp['type']
   end
 
@@ -54,8 +55,9 @@ describe 'Test Company Handling' do
     comp = ISSInternship::Company.first
 
     _(created['id']).must_equal comp.id
+    _(created['company_no']).must_equal existing_comp['company_no']
     _(created['name']).must_equal existing_comp['name']
-    _(created['location']).must_equal existing_comp['location']
+    _(created['address']).must_equal existing_comp['address']
     _(created['type']).must_equal existing_comp['type']
   end
 end

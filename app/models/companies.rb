@@ -12,7 +12,7 @@ module ISSInternship
 
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :name, :location, :type
+    set_allowed_columns :company_no, :name, :address, :type
 
     # rubocop:disable Metrics/MethodLength
     def to_json(options = {})
@@ -22,8 +22,9 @@ module ISSInternship
             type: 'company',
             attributes: {
               id: id,
+              company_no: company_no,
               name: name,
-              location: location,
+              address: address,
               type: type
             }
           }

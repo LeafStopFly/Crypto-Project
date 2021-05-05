@@ -13,7 +13,7 @@ describe 'Test Intership Handling' do
         comp = ISSInternship::Company.first
         new_interv = comp.add_interview(interv_data)
         
-        interv = ISSInternship::Internship.find(id: new_interv.id) 
+        interv = ISSInternship::Interview.find(id: new_interv.id) 
         _(interv.id).must_equal new_interv.id 
         _(interv.position).must_equal new_interv.position 
         _(interv.time).must_equal new_interv.time 
@@ -29,22 +29,22 @@ describe 'Test Intership Handling' do
     end
 
     it 'SECURITY: should not use deterministic integers as ID' do 
-        nterv_data = DATA[:interviews][1]
+        interv_data = DATA[:interviews][1]
         comp = ISSInternship::Company.first
         new_interv = comp.add_interview(interv_data)
         
 
-        _(new_intern.id.is_a?(Numeric)).must_equal false 
+        _(new_interv.id.is_a?(Numeric)).must_equal false 
     end
 
     it 'SECURITY: should secure sensitive attributes' do 
-        nterv_data = DATA[:interviews][1]
+        interv_data = DATA[:interviews][1]
         comp = ISSInternship::Company.first
         new_interv = comp.add_interview(interv_data)
         stored_interv = app.DB[:interviews].first
 
-        _(stored_interv[:description_secure]).wont_equal new_intern.description
-        _(stored_interv[:advice_secure]).wont_equal new_intern.advice
+        _(stored_interv[:description_secure]).wont_equal new_interv.description
+        _(stored_interv[:advice_secure]).wont_equal new_interv.advice
         
     end    
 end

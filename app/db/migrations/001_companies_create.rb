@@ -7,8 +7,9 @@ Sequel.migration do
     create_table(:companies) do
       primary_key :id
 
+      String :company_no
       String :name, unique: true, null: false
-      String :location
+      String :address
       String :type
 
       DateTime :created_at
