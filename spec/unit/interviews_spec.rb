@@ -43,7 +43,8 @@ describe 'Test Intership Handling' do
         new_interv = comp.add_interview(interv_data)
         stored_interv = app.DB[:interviews].first
 
-        _(stored_interv[:result_secure]).wont_equal new_intern.result 
+        _(stored_interv[:description_secure]).wont_equal new_intern.description
+        _(stored_interv[:advice_secure]).wont_equal new_intern.advice
         
     end    
 end
