@@ -76,6 +76,6 @@ describe 'Test Internship Handling' do
     _(created['reactionary']).must_equal intern_data['reactionary']
     _(created['recruit_source']).must_equal intern_data['recruit_source']
     _(created['rating']).must_equal intern_data['rating']
-    _(created['ISS_module']).must_equal intern_data['ISS_module']
+    _(created['iss_module']).must_equal intern_data['iss_module']
   end
 end
