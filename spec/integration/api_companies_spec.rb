@@ -67,7 +67,7 @@ describe 'Test Company Handling' do
 
       created = JSON.parse(last_response.body)['data']['data']['attributes']
       comp = ISSInternship::Company.first
-
+      
       _(created['id']).must_equal comp.id
       _(created['company_no']).must_equal @comp_data['company_no']
       _(created['name']).must_equal @comp_data['name']
