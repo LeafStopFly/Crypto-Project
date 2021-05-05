@@ -41,6 +41,7 @@ describe 'Test Intership Handling' do
         stored_intern = app.DB[:internships].first
 
         _(stored_intern[:job_description_secure]).wont_equal new_intern.job_description 
+        _(stored_intern[:reactionary_secure]).wont_equal new_intern.reactionary 
     end
 end
 
