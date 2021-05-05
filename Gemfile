@@ -7,6 +7,9 @@ gem 'json'
 gem 'puma', '~>5'
 gem 'roda', '~>3'
 
+# Networking
+gem 'http'
+
 # Configuration
 gem 'figaro'
 gem 'rake'

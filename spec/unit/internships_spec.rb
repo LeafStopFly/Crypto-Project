@@ -44,22 +44,3 @@ describe 'Test Intership Handling' do
         _(stored_intern[:reactionary_secure]).wont_equal new_intern.reactionary 
     end
 end
-
-# POST api/v1/companies
-routing.post do
-    new_data = JSON.parse(routing.body.read)
-    new_comp = Company.new(new_data)
-    raise('Could not save company') unless new_comp.save
-    
-    response.status = 201
-    response['Location'] = "#{@proj_route}/#{new_comp.id}" 
-    { message: 'Company saved', data: new_comp }.to_json
-    
-rescue Sequel::MassAssignmentRestriction
-    Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}" 
-    routing.halt 400, { message: 'Illegal Attributes' }.to_json
-    
-rescue StandardError => e
-    Api.logger.error "UNKOWN ERROR: #{e.message}"
-    routing.halt 500, { message: "Unknown server error" }.to_json
-end
