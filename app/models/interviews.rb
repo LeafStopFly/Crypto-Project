@@ -8,7 +8,28 @@ module ISSInternship
   class Interview < Sequel::Model
     many_to_one :companines
 
+    plugin :uuid, field: :id
     plugin :timestamps
+    plugin :whitelist_security
+    set_allowed_columns :position, :time, :interview_location, :level, :recruit_source,
+                        :rating, :result, :description, :waiting_result_time, :advice, :iss_module
+
+    # Secure getters and setters
+    def description
+      SecureDB.decrypt(description_secure)
+    end
+
+    def description=(plaintext)
+      self.description_secure = SecureDB.encrypt(plaintext)
+    end
+
+    def advice
+      SecureDB.decrypt(advice_secure)
+    end
+
+    def advice=(plaintext)
+      self.advice_secure = SecureDB.encrypt(plaintext)
+    end
 
     # rubocop:disable Metrics/MethodLength
     def to_json(options = {})

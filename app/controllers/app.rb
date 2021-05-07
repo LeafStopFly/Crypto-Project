@@ -8,7 +8,7 @@ module ISSInternship
   class Api < Roda
     plugin :halt
 
-    route do |routing| # rubocop:disable Metrics/BlockLength
+    route do |routing|
       response['Content-Type'] = 'application/json'
 
       routing.root do
@@ -38,7 +38,7 @@ module ISSInternship
                 output = { data: Company.first(id: company_id).internships }
                 JSON.pretty_generate(output)
               rescue StandardError
-                routing.halt 404, message: 'Could not find internship posts'
+                routing.halt 404, { message: 'Could not find internship posts' }.to_json
               end
 
               # POST api/v1/companies/[company_id]/internships
@@ -46,17 +46,16 @@ module ISSInternship
                 new_data = JSON.parse(routing.body.read)
                 company = Company.first(id: company_id)
                 new_internship = company.add_internship(new_data)
+                raise 'Could not save internship post' unless new_internship
 
-                if new_internship
-                  response.status = 201
-                  response['Location'] = "#{@internship_route}/#{new_internship.id}"
-                  { message: 'Internship Post saved', data: new_internship }.to_json
-                else
-                  routing.halt 400, 'Could not save internship post'
-                end
-
-              rescue StandardError
-                routing.halt 500, { message: 'Database error' }.to_json
+                response.status = 201
+                response['Location'] = "#{@internship_route}/#{new_internship.id}"
+                { message: 'Internship Post saved', data: new_internship }.to_json
+              rescue Sequel::MassAssignmentRestriction
+                Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
+                routing.halt 400, { message: 'Illegal Attributes' }.to_json
+              rescue StandardError => e
+                routing.halt 500, { message: e.message }.to_json
               end
             end
 
@@ -76,7 +75,7 @@ module ISSInternship
                 output = { data: Company.first(id: company_id).interviews }
                 JSON.pretty_generate(output)
               rescue StandardError
-                routing.halt 404, message: 'Could not find interview posts'
+                routing.halt 404, { message: 'Could not find interview posts'}.to_json
               end
 
               # POST api/v1/companies/[company_id]/interviews
@@ -84,17 +83,16 @@ module ISSInternship
                 new_data = JSON.parse(routing.body.read)
                 company = Company.first(id: company_id)
                 new_interview = company.add_interview(new_data)
+                raise 'Could not save interview' unless new_interview
 
-                if new_interview
-                  response.status = 201
-                  response['Location'] = "#{@interview_route}/#{new_interview.id}"
-                  { message: 'Interview Post saved', data: new_interview }.to_json
-                else
-                  routing.halt 400, 'Could not save interview post'
-                end
-
-              rescue StandardError
-                routing.halt 500, { message: 'Database error' }.to_json
+                response.status = 201
+                response['Location'] = "#{@interview_route}/#{new_interview.id}"
+                { message: 'Interview Post saved', data: new_interview }.to_json
+              rescue Sequel::MassAssignmentRestriction
+                Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
+                routing.halt 400, { message: 'Illegal Attributes' }.to_json
+              rescue StandardError => e
+                routing.halt 500, { message: e.message }.to_json
               end
             end
 

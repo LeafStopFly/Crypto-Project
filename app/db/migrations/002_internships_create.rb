@@ -5,16 +5,16 @@ require 'sequel'
 Sequel.migration do
   change do
     create_table(:internships) do
-      primary_key :id
+      uuid :id, primary_key: true
       foreign_key :company_id, table: :companies
 
       String :title, null: false
-      String :position, null:false
+      String :position, null: false
       String :year, null: false
       String :period, null: false
-      String :job_description, null: false
+      String :job_description_secure, null: false
       String :salary
-      String :reactionary, null: false
+      String :reactionary_secure, null: false
       String :recruit_source
       Float :rating, null: false
       String :iss_module
