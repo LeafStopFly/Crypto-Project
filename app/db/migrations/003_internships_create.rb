@@ -7,6 +7,7 @@ Sequel.migration do
     create_table(:internships) do
       uuid :id, primary_key: true
       foreign_key :company_id, table: :companies
+      foreign_key :owner_id, :accounts
 
       String :title, null: false
       String :position, null: false

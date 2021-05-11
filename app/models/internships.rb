@@ -6,6 +6,7 @@ require 'sequel'
 module ISSInternship
   # Models a internship
   class Internship < Sequel::Model
+    many_to_one :owner, class: :'ISSInternship::Account'
     many_to_one :companines
 
     plugin :uuid, field: :id
