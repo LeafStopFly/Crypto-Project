@@ -47,6 +47,8 @@ module ISSInternship
             routing.halt 500, { message: error.message }.to_json
           end
         end
+
+
         routing.on 'companies' do
           @comp_route = "#{@api_root}/companies"
 
@@ -69,6 +71,7 @@ module ISSInternship
               rescue StandardError
                 routing.halt 404, { message: 'Could not find internship posts' }.to_json
               end
+
 
               # POST api/v1/companies/[company_id]/internships
               routing.post do
@@ -148,8 +151,10 @@ module ISSInternship
             raise('Could not save company') unless new_company.save
 
             response.status = 201
+            
             response['Location'] = "#{@company_route}/#{new_company.id}"
             { message: 'Company saved', data: new_company }.to_json
+          
           rescue StandardError => e
             routing.halt 400, { message: e.message }.to_json
           end
@@ -158,3 +163,6 @@ module ISSInternship
     end
   end
 end
+
+
+         

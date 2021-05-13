@@ -30,6 +30,7 @@ module ISSInternship
     configure :development, :test do
       require 'pry'
       logger.level = Logger::ERROR
+      
     end
   end
 end
