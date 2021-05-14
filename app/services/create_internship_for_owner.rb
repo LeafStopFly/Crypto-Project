@@ -8,4 +8,4 @@ module ISSInternship
             .add_owned_internship(internship_data)
         end
     end
-ends
+end
