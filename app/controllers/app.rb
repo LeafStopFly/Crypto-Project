@@ -48,7 +48,6 @@ module ISSInternship
           end
         end
 
-
         routing.on 'companies' do
           @comp_route = "#{@api_root}/companies"
 

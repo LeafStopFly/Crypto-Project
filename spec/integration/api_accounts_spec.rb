@@ -23,7 +23,6 @@ describe 'Test Account Handling' do
       _(result['salt']).must_be_nil
       _(result['password']).must_be_nil
       _(result['password_hash']).must_be_nil
-      
     end
   end
 

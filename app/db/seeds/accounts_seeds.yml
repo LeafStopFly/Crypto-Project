@@ -1,9 +1,9 @@
 ---
 - :username: josey.chai 
-:email: josey@nthu.edu.tw 
-:password: abc123
+  :email: josey@nthu.edu.tw 
+  :password: abc123
 
 
 - :username: linda.yeh
-:email: linda@nthu.edu.tw 
-:password: 321cba
+  :email: linda@nthu.edu.tw 
+  :password: 321cba
