@@ -7,20 +7,17 @@ gem 'json'
 gem 'puma', '~>5'
 gem 'roda', '~>3'
 
-# Networking
-gem 'http'
-
 # Configuration
-gem 'figaro'
-gem 'rake'
+gem 'figaro', '~>1'
+gem 'rake', '~>13'
 
 # Security
 gem 'bundler-audit'
 gem 'rbnacl', '~>7'
 
 # Database
-gem 'hirb'
-gem 'sequel'
+gem 'hirb', '~>0'
+gem 'sequel', '~>5'
 group :development, :test do
   gem 'sequel-seed'
   gem 'sqlite3'
@@ -31,14 +28,12 @@ gem 'rubocop-performance'
 
 # Testing
 group :test do
-    gem 'minitest'
-    gem 'minitest-rg'
-    gem 'rack-test'
-  end  
+  gem 'minitest'
+  gem 'minitest-rg'
+  gem 'rack-test'
+end
 
-# Debugging
+# Development
 gem 'pry'
 gem 'rerun'
-
-# Static
 gem 'rubocop'
