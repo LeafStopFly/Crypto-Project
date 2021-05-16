@@ -23,7 +23,7 @@ describe 'Test Internship Handling' do
     _(last_response.status).must_equal 200
 
     result = JSON.parse last_response.body
-    _(result['data'].count).must_equal 2
+    _(result['data'].count).must_equal 3
   end
 
   it 'HAPPY: should be able to get details of a single internship' do
