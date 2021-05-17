@@ -6,6 +6,7 @@ require 'sequel'
 module ISSInternship
   # Models a interview
   class Interview < Sequel::Model
+    many_to_one :owner, class: :'ISSInternship::Account'
     many_to_one :companines
 
     plugin :uuid, field: :id

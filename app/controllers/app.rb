@@ -18,12 +18,42 @@ module ISSInternship
 
       @api_root = 'api/v1'
       routing.on @api_root do
+        routing.on 'accounts' do
+          @account_route = "#{@api_root}/accounts"
+
+          routing.on String do |username|
+            # GET api/v1/accounts/[username]
+            routing.get do
+              account = Account.first(username: username)
+              account ? account.to_json : raise('Account not found')
+            rescue StandardError
+              routing.halt 404, { message: error.message }.to_json
+            end
+          end
+
+          # POST api/v1/accounts
+          routing.post do
+            new_data = JSON.parse(routing.body.read)
+            new_account = Account.new(new_data)
+            raise('Could not save account') unless new_account.save
+
+            response.status = 201
+            response['Location'] = "#{@account_route}/#{new_account.id}"
+            { message: 'Account saved', data: new_account }.to_json
+          rescue Sequel::MassAssignmentRestriction
+            routing.halt 400, { message: 'Illegal Request' }.to_json
+          rescue StandardError => e
+            puts e.inspect
+            routing.halt 500, { message: error.message }.to_json
+          end
+        end
+
         routing.on 'companies' do
           @comp_route = "#{@api_root}/companies"
 
           routing.on String do |company_id|
             routing.on 'internships' do
-              @internship_route = "#{@api_root}/companies/#{company_id}/internships"
+              @internship_route = "#{@comp_route}/#{company_id}/internships"
 
               # GET api/v1/companies/[company_id]/internships/[internship_id]
               routing.get String do |internship_id|
@@ -41,11 +71,11 @@ module ISSInternship
                 routing.halt 404, { message: 'Could not find internship posts' }.to_json
               end
 
+
               # POST api/v1/companies/[company_id]/internships
               routing.post do
                 new_data = JSON.parse(routing.body.read)
-                company = Company.first(id: company_id)
-                new_internship = company.add_internship(new_data)
+                new_internship = CreateInternshipForCompany.call( company_id: company_id, internship_data: new_data)
                 raise 'Could not save internship post' unless new_internship
 
                 response.status = 201
@@ -60,7 +90,7 @@ module ISSInternship
             end
 
             routing.on 'interviews' do
-              @interview_route = "#{@api_root}/companies/#{company_id}/interviews"
+              @interview_route = "#{@comp_route}/#{company_id}/interviews"
 
               # GET api/v1/companies/[company_id]/interviews/[interview_id]
               routing.get String do |interview_id|
@@ -81,8 +111,7 @@ module ISSInternship
               # POST api/v1/companies/[company_id]/interviews
               routing.post do
                 new_data = JSON.parse(routing.body.read)
-                company = Company.first(id: company_id)
-                new_interview = company.add_interview(new_data)
+                new_interview = CreateInterviewForCompany.call( company_id: company_id, interview_data: new_data)
                 raise 'Could not save interview' unless new_interview
 
                 response.status = 201
@@ -121,8 +150,10 @@ module ISSInternship
             raise('Could not save company') unless new_company.save
 
             response.status = 201
+            
             response['Location'] = "#{@company_route}/#{new_company.id}"
             { message: 'Company saved', data: new_company }.to_json
+          
           rescue StandardError => e
             routing.halt 400, { message: e.message }.to_json
           end
@@ -131,3 +162,6 @@ module ISSInternship
     end
   end
 end
+
+
+         

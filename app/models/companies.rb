@@ -10,6 +10,12 @@ module ISSInternship
     one_to_many :interviews
     plugin :association_dependencies, internships: :destroy, interviews: :destroy
 
+    many_to_many :interns,
+                 class: :'ISSInternship::Account',
+                 join_table: :accounts_companies,
+                 left_key: :company_id, right_key: :account_id
+
+
     plugin :timestamps
     plugin :whitelist_security
     set_allowed_columns :company_no, :name, :address, :type

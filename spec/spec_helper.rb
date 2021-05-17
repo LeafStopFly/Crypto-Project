@@ -12,9 +12,12 @@ def wipe_database
   app.DB[:internships].delete
   app.DB[:interviews].delete
   app.DB[:companies].delete
+  app.DB[:accounts].delete
 end
 
-DATA = {} # rubocop:disable Style/MutableConstant
-DATA[:companies] = YAML.safe_load File.read('app/db/seeds/company_seeds.yml')
-DATA[:internships] = YAML.safe_load File.read('app/db/seeds/internship_seeds.yml')
-DATA[:interviews] = YAML.safe_load File.read('app/db/seeds/interview_seeds.yml')
+DATA = {
+  accounts: YAML.load(File.read('app/db/seeds/accounts_seeds.yml')),
+  companies: YAML.load(File.read('app/db/seeds/companies_seeds.yml')),
+  internships: YAML.load(File.read('app/db/seeds/internship_seeds.yml')),
+  interviews: YAML.load(File.read('app/db/seeds/interview_seeds.yml'))
+}.freeze

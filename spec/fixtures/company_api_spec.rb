@@ -1,17 +1,16 @@
 # frozen_string_literal: false
 
-# require 'minitest/autorun'
-# require 'minitest/rg'
-# require 'yaml'
-# require_relative '../app/get_company/company_api'
+require_relative '../spec_helper'
 
-# NO = '15725713'.freeze
-# # CORRECT = YAML.safe_load(File.read('spec/fixtures/poke_data/poke1_results.yml'))
-# describe 'Tests Company API library' do
-#   it 'HAPPY: should provide correct company attributes' do
-#     companytest = ISSInternship::CompanyInf::Api.new.company_data(NO)
-#     print(companytest.name)
-#     # _(pokemontest.id).must_equal CORRECT['id']
-#     # _(pokemontest.flavor_text_entries).must_equal CORRECT['flavor_text_entries']
-#   end
-# end
+NO = '15725713'.freeze
+CORRECT = YAML.safe_load(File.read('spec/fixtures/company_data/company_result.yml'))[0]
+describe 'Tests Company API library' do
+  it 'HAPPY: should provide correct company attributes' do
+    companytest = ISSInternship::CompanyInf::CompanyMapper.new.find(NO)
+
+    _(companytest.company_no).must_equal CORRECT['company_no']
+    _(companytest.name).must_equal CORRECT['name']
+    _(companytest.address).must_equal CORRECT['address']
+    _(companytest.type).must_equal CORRECT['type']
+  end
+end
