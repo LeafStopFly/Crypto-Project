@@ -11,6 +11,11 @@ module ISSInternship
     one_to_many :owned_interviews, class: :'ISSInternship::Interview', key: :owner_id
     plugin :association_dependencies, owned_internships: :destroy, owned_interviews: :destroy
 
+    many_to_many :companies,
+                 class: :'ISSInternship::Company',
+                 join_table: :accounts_companies,
+                 left_key: :account_id, right_key: :company_id
+
     plugin :whitelist_security
     set_allowed_columns :username, :email, :password
 

@@ -7,15 +7,14 @@ Sequel.seed(:development) do
     create_companies
     create_owned_internships
     create_owned_interviews
-    company_interview
-    company_internship
+    add_interns
   end
 end
 
 require 'yaml'
 DIR = File.dirname(__FILE__)
 ACCOUNTS_INFO = YAML.load_file("#{DIR}/accounts_seeds.yml")
-# OWNER_INFO = YAML.load_file("#{DIR}/owners_companies.yml")
+INTERN_INFO = YAML.load_file("#{DIR}/accounts_companies.yml")
 OWNER_INFO1 = YAML.load_file("#{DIR}/owners_internships.yml")
 OWNER_INFO2 = YAML.load_file("#{DIR}/owners_interviews.yml")
 COMP_INFO = YAML.load_file("#{DIR}/companies_seeds.yml")
@@ -58,28 +57,16 @@ def create_owned_interviews
   end
 end
 
-# there's a problem in ISSInternship::CreateInterview/InternshipForCompany, we will add same internship/interview in DB at the same time
-# because internship/interview is already added by ISSInternship::CreateInterview/InternshipForOwner.
-def company_interview
-  interv_info_each = INTERVIEW_INFO.each
-  companies_cycle = ISSInternship::Company.all.cycle
-  loop do
-    interv_info = interv_info_each.next
-    company = companies_cycle.next
-    ISSInternship::CreateInterviewForCompany.call(
-      company_id: company.id, interview_data: interv_info
-    )
+def add_interns
+  intern_info = INTERN_INFO
+  intern_info.each do |intern|
+    account = ISSInternship::Account.first(username: intern['username'])
+    comp = ISSInternship::Company.first(name: intern['company_no'])
+    binding.irb
+    intern['company_no'].each do |comp_no|
+      comp = ISSInternship::Company.first(company_no: comp_no)
+      account.add_company(comp)
+    end
   end
 end
 
-def company_internship
-  intern_info_each = INTERNSHIP_INFO.each
-  companies_cycle = ISSInternship::Company.all.cycle
-  loop do
-    intern_info = intern_info_each.next
-    company = companies_cycle.next
-    ISSInternship::CreateInternshipForCompany.call(
-      company_id: company.id, internship_data: intern_info
-    )
-  end
-end
