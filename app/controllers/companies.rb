@@ -102,10 +102,10 @@ module ISSInternship
 
       # POST api/v1/companies
       routing.post do
-        new_data = JSON.parse(routing.body.read)
-        new_company = Company.new(new_data)
+        company_no = JSON.parse(routing.body.read)
+        new_company = SearchCompany.call(company_no)
 
-        raise('Could not save company') unless new_company.save
+        raise('Could not save company') unless new_company
 
         response.status = 201
         

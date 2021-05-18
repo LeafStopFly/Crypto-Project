@@ -62,7 +62,6 @@ def add_interns
   intern_info.each do |intern|
     account = ISSInternship::Account.first(username: intern['username'])
     comp = ISSInternship::Company.first(name: intern['company_no'])
-    binding.irb
     intern['company_no'].each do |comp_no|
       comp = ISSInternship::Company.first(company_no: comp_no)
       account.add_company(comp)
