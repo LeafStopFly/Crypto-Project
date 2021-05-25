@@ -17,16 +17,23 @@ module ISSInternship
       path: File.expand_path('config/secrets.yml')
     )
     Figaro.load
-    def self.config() = Figaro.env
-
+    # def self.config() = Figaro.env
+    def self.config()
+      Figaro.env
+    end
     # Logger setup
     LOGGER = Logger.new($stderr)
-    def self.logger() = LOGGER
-
+    # def self.logger() = LOGGER
+    def self.logger()
+      LOGGER
+    end
     # Database Setup
-    DB = Sequel.connect(ENV.delete('DATABASE_URL'))
-    def self.DB() = DB # rubocop:disable Naming/MethodName
-
+    DB = Sequel.connect(ENV.delete('DATABASE_URL')+"?encoding=utf8")
+    # DB = Sequel.mysql(database: ENV.delete('DATABASE_URL'), encoding: "utf8")
+    # def self.DB() = DB # rubocop:disable Naming/MethodName
+    def self.DB()
+      DB
+    end
     configure :development, :test do
       require 'pry'
       logger.level = Logger::ERROR

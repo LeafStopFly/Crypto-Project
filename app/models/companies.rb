@@ -8,13 +8,17 @@ module ISSInternship
   class Company < Sequel::Model
     one_to_many :internships
     one_to_many :interviews
-    plugin :association_dependencies, internships: :destroy, interviews: :destroy
 
     many_to_many :interns,
                  class: :'ISSInternship::Account',
                  join_table: :accounts_companies,
                  left_key: :company_id, right_key: :account_id
-
+    
+    plugin :association_dependencies, 
+            internships: :destroy,
+            interviews: :destroy,
+            interns: :nullify
+    
 
     plugin :timestamps
     plugin :whitelist_security
@@ -24,15 +28,26 @@ module ISSInternship
     def to_json(options = {})
       JSON(
         {
-          data: {
-            type: 'company',
-            attributes: {
-              id: id,
-              company_no: company_no,
-              name: name,
-              address: address,
-              type: type
-            }
+          type: 'company',
+          attributes: {
+            id: id,
+            company_no: company_no,
+            name: name,
+            address: address,
+            links: [
+              {
+                rel: 'company_related_internships',
+                href: "#{Api.config.API_HOST}/api/v1/companies/#{id}/internships"
+              },
+              {
+                rel: 'company_related_interviews',
+                href: "#{Api.config.API_HOST}/api/v1/companies/#{id}/interviews"
+              },
+              {
+                rel: 'companies_related_interns',
+                href: "#{Api.config.API_HOST}/api/v1/companies/#{id}/interns"
+              }
+            ]
           }
         }, options
       )

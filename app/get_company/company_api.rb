@@ -6,7 +6,8 @@ module ISSInternship
   # Library for GCIS Web API
     class Api
       def company_data(company_no)
-        Request.new.company(company_no).parse
+        JSON.parse(Request.new.company(company_no))
+        # Request.new.company(company_no).parse
       end
 
       # Sends out HTTP requests to GCIS

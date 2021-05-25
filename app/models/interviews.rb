@@ -33,25 +33,43 @@ module ISSInternship
     end
 
     # rubocop:disable Metrics/MethodLength
+    def simplify_to_json(options = {})
+      # for showing all courses (only id, course_name & link to course details)
+      JSON(
+        {
+          type: 'interview',
+          attributes: {
+            id: id,
+            position: position,
+            rating: rating,
+            iss_module: iss_module,
+            link: 
+            {
+              rel: 'interview_details',
+              href: "#{Api.config.API_HOST}/api/v1/interviews/#{id}"
+            }
+          }
+        }, options
+      )
+    end
+
     def to_json(options = {})
       JSON(
         {
-          data: {
-            type: 'interview',
-            attributes: {
-              id: id,
-              position: position,
-              time: time,
-              interview_location: interview_location,
-              level: level,
-              recruit_source: recruit_source,
-              rating: rating,
-              result: result,
-              description: description,
-              waiting_result_time: waiting_result_time,
-              advice: advice,
-              iss_module: iss_module
-            }
+          type: 'interview',
+          attributes: {
+            id: id,
+            position: position,
+            time: time,
+            interview_location: interview_location,
+            level: level,
+            recruit_source: recruit_source,
+            rating: rating,
+            result: result,
+            description: description,
+            waiting_result_time: waiting_result_time,
+            advice: advice,
+            iss_module: iss_module
           }
         }, options
       )
