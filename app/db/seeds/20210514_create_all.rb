@@ -7,6 +7,7 @@ Sequel.seed(:development) do
     create_companies
     add_interns
     company_internships
+    company_interviews
     create_owned_internships
     create_owned_interviews
   end
@@ -22,6 +23,7 @@ COMP_INFO = YAML.load_file("#{DIR}/companies_seeds.yml")
 INTERNSHIP_INFO = YAML.load_file("#{DIR}/internship_seeds.yml")
 INTERVIEW_INFO = YAML.load_file("#{DIR}/interview_seeds.yml")
 COMP_INTERNSHIP = YAML.load_file("#{DIR}/company_internships.yml")
+COMP_INTERVIEW = YAML.load_file("#{DIR}/company_interviews.yml")
 
 def create_accounts
   ACCOUNTS_INFO.each do |account_info|
@@ -51,7 +53,7 @@ def create_owned_interviews
   OWNER_INFO2.each do |owner|
     account = ISSInternship::Account.first(username: owner['username'])
     owner['interv_name'].each do |interv_name|
-      interv_data = INTERVIEW_INFO.find { |interv| interv['position'] == interv_name }
+      interv_data = ISSInternship::Interview.first(position: interv_name)
       ISSInternship::CreateInterviewForOwner.call(
         owner_id: account.id, interview_data: interv_data
       )
@@ -80,6 +82,18 @@ def company_internships
       intern_data = INTERNSHIP_INFO.find { |intern| intern['title'] == title }
       ISSInternship::CreateInternshipForCompany.call(
         company_id: company.id, internship_data: intern_data
+      )
+    end
+  end
+end
+
+def company_interviews
+  COMP_INTERVIEW.each do |relation|
+    company = ISSInternship::Company.first(company_no: relation['company_no'])
+    relation['interv_name'].each do |name|
+      interv_data = INTERVIEW_INFO.find { |interv| interv['position'] == name }
+      ISSInternship::CreateInterviewForCompany.call(
+        company_id: company.id, interview_data: interv_data
       )
     end
   end
