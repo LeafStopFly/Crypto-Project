@@ -7,7 +7,7 @@ module ISSInternship
       intern = Account.first(username: username)
       company = Company.first(company_no: company_no)
   
-      intern.add_company
+      intern.add_intern(company)
       intern
     end
   end

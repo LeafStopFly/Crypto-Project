@@ -62,15 +62,11 @@ def create_owned_interviews
 end
 
 def add_interns
-  intern_info = INTERN_INFO
-  intern_info.each do |intern|
-
-    account = ISSInternship::Account.first(username: intern['username'])
-    # internships = ISSInternship::Internship.where(owner_id: account.id).all
-    # comp = ISSInternship::Company.first(name: intern['company_no'])
+  INTERN_INFO.each do |intern|
     intern['company_no'].each do |comp_no|
-      comp = ISSInternship::Company.first(company_no: comp_no)
-      account.add_intern(comp)
+      ISSInternship::AddAccountToCompany.call(
+        username: intern['username'], company_no: comp_no
+      )
     end
   end
 end
