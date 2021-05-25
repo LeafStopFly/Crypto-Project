@@ -34,7 +34,7 @@ describe 'Test Company Handling' do
       _(result['data']['attributes']['company_no']).must_equal existing_comp['company_no']
       _(result['data']['attributes']['name']).must_equal existing_comp['name']
       _(result['data']['attributes']['address']).must_equal existing_comp['address']
-      _(result['data']['attributes']['type']).must_equal existing_comp['type']
+
     end
 
     it 'SAD: should return error if unknown company requested' do
@@ -61,7 +61,7 @@ describe 'Test Company Handling' do
     end
 
     it 'HAPPY: should be able to create new companies' do
-      post 'api/v1/companies', @comp_data.to_json, @req_header
+      post 'api/v1/companies', @comp_data['company_no'].to_json, @req_header
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
@@ -72,7 +72,6 @@ describe 'Test Company Handling' do
       _(created['company_no']).must_equal @comp_data['company_no']
       _(created['name']).must_equal @comp_data['name']
       _(created['address']).must_equal @comp_data['address']
-      _(created['type']).must_equal @comp_data['type']
     end
   end
 end

@@ -12,7 +12,6 @@ module ISSInternship
       end
 
       def find(company_no)
-        # data = all data
         data = @gateway.company_data(company_no)
         build_entity(data)
       end
@@ -33,25 +32,20 @@ module ISSInternship
           ISSInternship::Company.create(
             company_no: company_no,
             name: name,
-            address: address,
-            type: type
+            address: address
           )
         end
 
         def company_no
-          @data['President_No']
+          @data['Business_Accounting_NO']
         end
 
         def name
-          @data['Business_Name']
+          @data['Company_Name']
         end
 
         def address
-          @data['Business_Address']
-        end
-
-        def type
-          @data['Business_Item_Old'][0]['Business_Item_Desc']
+          @data['Company_Location']
         end
       end
     end

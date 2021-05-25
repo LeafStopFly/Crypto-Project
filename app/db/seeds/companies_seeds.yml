@@ -1,10 +1,8 @@
 ---
-- company_no: '12345678'
-  name: 'TSMC'
-  address: '新竹市'
-  type: '電子工業'
+- company_no: '22099131'
+  name: '台灣積體電路製造股份有限公司'
+  address: '新竹市力行六路8號'
   
-- company_no: '87654321'
-  name: 'HP'
-  address: '新竹市'
-  type: '電子工業'
+- company_no: '24779958' 
+  name: 台灣惠普資訊科技股份有限公司 
+  address: 臺北市南港區經貿二路66號10樓

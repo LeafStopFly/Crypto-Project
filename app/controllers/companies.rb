@@ -83,6 +83,36 @@ module ISSInternship
           end
         end
 
+        routing.on 'interns' do
+          @interns_route = "#{@comp_route}/#{company_id}/interns"
+
+          # GET api/v1/companies/[company_id]/interns
+          routing.get do
+            output = { data: Company.first(id: company_id).interns }
+            JSON.pretty_generate(output)
+          rescue StandardError
+            routing.halt 404, { message: 'Could not find interns' }.to_json
+          end
+
+
+          # POST api/v1/companies/[company_id]/interns
+          routing.post do
+            new_data = JSON.parse(routing.body.read)
+            company = Company.first(id: company_id)
+            new_intern = company.add_intern(new_data)
+            raise 'Could not save intern' unless new_intern
+
+            response.status = 201
+            response['Location'] = "#{@interns_route}"
+            { message: 'Internsaved', data: new_intern }.to_json
+          rescue Sequel::MassAssignmentRestriction
+            Api.logger.warn "MASS-ASSIGNMENT: #{new_data.keys}"
+            routing.halt 400, { message: 'Illegal Attributes' }.to_json
+          rescue StandardError => e
+            routing.halt 500, { message: e.message }.to_json
+          end
+        end
+
         # GET api/v1/companies/[company_id]
         routing.get do
           company = Company.first(id: company_id)
@@ -102,10 +132,10 @@ module ISSInternship
 
       # POST api/v1/companies
       routing.post do
-        new_data = JSON.parse(routing.body.read)
-        new_company = Company.new(new_data)
+        company_no = JSON.parse(routing.body.read)
+        new_company = SearchCompany.call(company_no["company_no"])
 
-        raise('Could not save company') unless new_company.save
+        raise('Could not save company') unless new_company
 
         response.status = 201
         

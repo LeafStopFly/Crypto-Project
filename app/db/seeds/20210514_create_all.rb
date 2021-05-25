@@ -5,9 +5,10 @@ Sequel.seed(:development) do
     puts 'Seeding accounts, companies, internships, interviews'
     create_accounts
     create_companies
+    add_interns
+    company_internships
     create_owned_internships
     create_owned_interviews
-    add_interns
   end
 end
 
@@ -20,6 +21,7 @@ OWNER_INFO2 = YAML.load_file("#{DIR}/owners_interviews.yml")
 COMP_INFO = YAML.load_file("#{DIR}/companies_seeds.yml")
 INTERNSHIP_INFO = YAML.load_file("#{DIR}/internship_seeds.yml")
 INTERVIEW_INFO = YAML.load_file("#{DIR}/interview_seeds.yml")
+COMP_INTERNSHIP = YAML.load_file("#{DIR}/company_internships.yml")
 
 def create_accounts
   ACCOUNTS_INFO.each do |account_info|
@@ -37,7 +39,7 @@ def create_owned_internships
   OWNER_INFO1.each do |owner|
     account = ISSInternship::Account.first(username: owner['username'])
     owner['intern_name'].each do |intern_name|
-      intern_data = INTERNSHIP_INFO.find { |intern| intern['title'] == intern_name }
+      intern_data = ISSInternship::Internship.first(title: intern_name)
       ISSInternship::CreateInternshipForOwner.call(
         owner_id: account.id, internship_data: intern_data
       )
@@ -60,13 +62,25 @@ end
 def add_interns
   intern_info = INTERN_INFO
   intern_info.each do |intern|
+
     account = ISSInternship::Account.first(username: intern['username'])
-    comp = ISSInternship::Company.first(name: intern['company_no'])
-    binding.irb
+    # internships = ISSInternship::Internship.where(owner_id: account.id).all
+    # comp = ISSInternship::Company.first(name: intern['company_no'])
     intern['company_no'].each do |comp_no|
       comp = ISSInternship::Company.first(company_no: comp_no)
-      account.add_company(comp)
+      account.add_intern(comp)
     end
   end
 end
 
+def company_internships
+  COMP_INTERNSHIP.each do |relation|
+    company = ISSInternship::Company.first(company_no: relation['company_no'])
+    relation['intern_title'].each do |title|
+      intern_data = INTERNSHIP_INFO.find { |intern| intern['title'] == title }
+      ISSInternship::CreateInternshipForCompany.call(
+        company_id: company.id, internship_data: intern_data
+      )
+    end
+  end
+end

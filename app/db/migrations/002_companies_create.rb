@@ -10,7 +10,6 @@ Sequel.migration do
       String :company_no
       String :name, unique: true, null: false
       String :address
-      String :type
 
       DateTime :created_at
       DateTime :updated_at

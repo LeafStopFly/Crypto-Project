@@ -9,12 +9,16 @@ module ISSInternship
   class Account < Sequel::Model
     one_to_many :owned_internships, class: :'ISSInternship::Internship', key: :owner_id
     one_to_many :owned_interviews, class: :'ISSInternship::Interview', key: :owner_id
-    plugin :association_dependencies, owned_internships: :destroy, owned_interviews: :destroy
 
-    many_to_many :companies,
+    many_to_many :interns,
                  class: :'ISSInternship::Company',
                  join_table: :accounts_companies,
                  left_key: :account_id, right_key: :company_id
+
+    plugin :association_dependencies, 
+            owned_internships: :destroy,
+            owned_interviews: :destroy,
+            interns: :nullify
 
     plugin :whitelist_security
     set_allowed_columns :username, :email, :password
@@ -43,8 +47,10 @@ module ISSInternship
         {
           type: 'account',
           id: id,
-          username: username,
-          email: email
+          attributes:{
+            username: username,
+            email: email
+          }
         }, options
       )
     end
