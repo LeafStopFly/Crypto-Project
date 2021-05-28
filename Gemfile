@@ -7,6 +7,7 @@ ruby File.read('.ruby-version').strip
 gem 'json'
 gem 'puma', '~>5'
 gem 'roda', '~>3'
+gem 'http'
 
 # Configuration
 gem 'figaro', '~>1'
