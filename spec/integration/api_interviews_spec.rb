@@ -34,19 +34,19 @@ describe 'Test Interview Handling' do
     get "/api/v1/companies/#{comp.id}/interviews/#{interv.id}"
     _(last_response.status).must_equal 200
 
-    result = JSON.parse last_response.body
-    _(result['data']['attributes']['id']).must_equal interv.id
-    _(result['data']['attributes']['position']).must_equal interv_data['position']
-    _(result['data']['attributes']['time']).must_equal interv_data['time']
-    _(result['data']['attributes']['interview_location']).must_equal interv_data['interview_location']
-    _(result['data']['attributes']['level']).must_equal interv_data['level']
-    _(result['data']['attributes']['recruit_source']).must_equal interv_data['recruit_source']
-    _(result['data']['attributes']['rating']).must_equal interv_data['rating']
-    _(result['data']['attributes']['result']).must_equal interv_data['result']
-    _(result['data']['attributes']['description']).must_equal interv_data['description']
-    _(result['data']['attributes']['waiting_result_time']).must_equal interv_data['waiting_result_time']
-    _(result['data']['attributes']['advice']).must_equal interv_data['advice']
-    _(result['data']['attributes']['iss_module']).must_equal interv_data['iss_module']
+    result = JSON.parse(last_response.body)['attributes']
+    _(result['id']).must_equal interv.id
+    _(result['position']).must_equal interv_data['position']
+    _(result['time']).must_equal interv_data['time']
+    _(result['interview_location']).must_equal interv_data['interview_location']
+    _(result['level']).must_equal interv_data['level']
+    _(result['recruit_source']).must_equal interv_data['recruit_source']
+    _(result['rating']).must_equal interv_data['rating']
+    _(result['result']).must_equal interv_data['result']
+    _(result['description']).must_equal interv_data['description']
+    _(result['waiting_result_time']).must_equal interv_data['waiting_result_time']
+    _(result['advice']).must_equal interv_data['advice']
+    _(result['iss_module']).must_equal interv_data['iss_module']
   end
 
   it 'SAD: should return error if unknown interview requested' do
@@ -69,7 +69,7 @@ describe 'Test Interview Handling' do
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
-      created = JSON.parse(last_response.body)['data']['data']['attributes']
+      created = JSON.parse(last_response.body)['data']['attributes']
       interv = ISSInternship::Interview.first
 
       _(created['id']).must_equal interv.id

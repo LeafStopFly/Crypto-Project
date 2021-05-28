@@ -34,17 +34,17 @@ describe 'Test Internship Handling' do
     get "/api/v1/companies/#{comp.id}/internships/#{intern.id}"
     _(last_response.status).must_equal 200
 
-    result = JSON.parse last_response.body
-    _(result['data']['attributes']['id']).must_equal intern.id
-    _(result['data']['attributes']['title']).must_equal intern_data['title']
-    _(result['data']['attributes']['year']).must_equal intern_data['year']
-    _(result['data']['attributes']['period']).must_equal intern_data['period']
-    _(result['data']['attributes']['job_description']).must_equal intern_data['job_description']
-    _(result['data']['attributes']['salary']).must_equal intern_data['salary']
-    _(result['data']['attributes']['reactionary']).must_equal intern_data['reactionary']
-    _(result['data']['attributes']['recruit_source']).must_equal intern_data['recruit_source']
-    _(result['data']['attributes']['rating']).must_equal intern_data['rating']
-    _(result['data']['attributes']['iss_module']).must_equal intern_data['iss_module']
+    result = JSON.parse(last_response.body)['attributes']
+    _(result['id']).must_equal intern.id
+    _(result['title']).must_equal intern_data['title']
+    _(result['year']).must_equal intern_data['year']
+    _(result['period']).must_equal intern_data['period']
+    _(result['job_description']).must_equal intern_data['job_description']
+    _(result['salary']).must_equal intern_data['salary']
+    _(result['reactionary']).must_equal intern_data['reactionary']
+    _(result['recruit_source']).must_equal intern_data['recruit_source']
+    _(result['rating']).must_equal intern_data['rating']
+    _(result['iss_module']).must_equal intern_data['iss_module']
   end
 
   it 'SAD: should return error if unknown internship requested' do
@@ -67,7 +67,7 @@ describe 'Test Internship Handling' do
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
-      created = JSON.parse(last_response.body)['data']['data']['attributes']
+      created = JSON.parse(last_response.body)['data']['attributes']
       intern = ISSInternship::Internship.first
 
       _(created['id']).must_equal intern.id
