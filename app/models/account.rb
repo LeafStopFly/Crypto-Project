@@ -15,7 +15,7 @@ module ISSInternship
                  join_table: :accounts_companies,
                  left_key: :account_id, right_key: :company_id
 
-    plugin :association_dependencies, 
+    plugin :association_dependencies,
             owned_internships: :destroy,
             owned_interviews: :destroy,
             interns: :nullify
@@ -47,7 +47,7 @@ module ISSInternship
         {
           type: 'account',
           id: id,
-          attributes:{
+          attributes: {
             username: username,
             email: email
           }

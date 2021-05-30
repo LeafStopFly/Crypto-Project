@@ -27,6 +27,7 @@ module ISSInternship
         def initialize(comp_detail)
           @data = comp_detail[0]
         end
+
         # ISSInternship::Company.create(DATA[:companies][0]).save
         def build_entity
           ISSInternship::Company.create(

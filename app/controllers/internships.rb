@@ -19,7 +19,7 @@ module ISSInternship
           routing.halt 404, { message: e.message }.to_json
         end
       end
-  
+
       # GET api/v1/internships
       routing.get do
         internships = Internship.all.map do |each_intern|

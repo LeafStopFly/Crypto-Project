@@ -29,11 +29,10 @@ module ISSInternship
             routing.halt 404, { message: 'Could not find internship posts' }.to_json
           end
 
-
           # POST api/v1/companies/[company_id]/internships
           routing.post do
             new_data = JSON.parse(routing.body.read)
-            new_internship = CreateInternshipForCompany.call( company_id: company_id, internship_data: new_data)
+            new_internship = CreateInternshipForCompany.call(company_id: company_id, internship_data: new_data)
             raise 'Could not save internship post' unless new_internship
 
             response.status = 201
@@ -63,7 +62,7 @@ module ISSInternship
             output = { data: Company.first(id: company_id).interviews }
             JSON.pretty_generate(output)
           rescue StandardError
-            routing.halt 404, { message: 'Could not find interview posts'}.to_json
+            routing.halt 404, { message: 'Could not find interview posts' }.to_json
           end
 
           # POST api/v1/companies/[company_id]/interviews
@@ -93,7 +92,6 @@ module ISSInternship
           rescue StandardError
             routing.halt 404, { message: 'Could not find interns' }.to_json
           end
-
 
           # POST api/v1/companies/[company_id]/interns
           routing.post do
@@ -133,15 +131,15 @@ module ISSInternship
       # POST api/v1/companies
       routing.post do
         company_no = JSON.parse(routing.body.read)
-        new_company = SearchCompany.call(company_no["company_no"])
+        new_company = SearchCompany.call(company_no['company_no'])
 
         raise('Could not save company') unless new_company
 
         response.status = 201
-        
+
         response['Location'] = "#{@company_route}/#{new_company.id}"
         { message: 'Company saved', data: new_company }.to_json
-      
+
       rescue StandardError => e
         routing.halt 400, { message: e.message }.to_json
       end

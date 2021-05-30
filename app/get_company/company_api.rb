@@ -3,7 +3,7 @@
 require 'http'
 module ISSInternship
   module CompanyInf
-  # Library for GCIS Web API
+    # Library for GCIS Web API
     class Api
       def company_data(company_no)
         JSON.parse(Request.new.company(company_no))
@@ -14,9 +14,9 @@ module ISSInternship
       class Request
         # GOV_PATH = 'https://data.gcis.nat.gov.tw/od/data/api/426D5542-5F05-43EB-83F9-F1300F14E1F1?$format=json&$filter=President_No%20eq%20'.freeze
         GOV_PATH = 'https://data.gcis.nat.gov.tw/od/data/api/5F64D864-61CB-4D0D-8AD9-492047CC1EA6?$format=json&$filter=Business_Accounting_NO%20eq%20'.freeze
-        
+
         def company(company_no)
-          get(GOV_PATH+company_no)
+          get(GOV_PATH + company_no)
         end
 
         def get(url)

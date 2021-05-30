@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 require_relative '../spec_helper'
 
 describe 'Test Intership Handling' do
@@ -41,7 +43,7 @@ describe 'Test Intership Handling' do
     new_intern = comp.add_internship(intern_data)
     stored_intern = app.DB[:internships].first
 
-    _(stored_intern[:job_description_secure]).wont_equal new_intern.job_description 
-    _(stored_intern[:reactionary_secure]).wont_equal new_intern.reactionary 
+    _(stored_intern[:job_description_secure]).wont_equal new_intern.job_description
+    _(stored_intern[:reactionary_secure]).wont_equal new_intern.reactionary
   end
 end

@@ -18,7 +18,7 @@ module ISSInternship
 
       secure_request?(routing) ||
         routing.halt(403, { message: 'TLS/SSL Required' }.to_json)
-      
+
       routing.root do
         response.status = 200
         { message: 'ISS InternshipAPI up at /api/v1' }.to_json
@@ -31,6 +31,3 @@ module ISSInternship
     end
   end
 end
-
-
-         

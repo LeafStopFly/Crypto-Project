@@ -44,7 +44,7 @@ module ISSInternship
             position: position,
             rating: rating,
             iss_module: iss_module,
-            link: 
+            link:
             {
               rel: 'internship_details',
               href: "#{Api.config.API_HOST}/api/v1/internships/#{id}"

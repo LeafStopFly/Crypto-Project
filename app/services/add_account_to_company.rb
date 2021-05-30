@@ -6,7 +6,7 @@ module ISSInternship
     def self.call(username:, company_no:)
       intern = Account.first(username: username)
       company = Company.first(company_no: company_no)
-  
+
       intern.add_intern(company)
       intern
     end

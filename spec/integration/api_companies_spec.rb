@@ -34,7 +34,6 @@ describe 'Test Company Handling' do
       _(result['attributes']['company_no']).must_equal existing_comp['company_no']
       _(result['attributes']['name']).must_equal existing_comp['name']
       _(result['attributes']['address']).must_equal existing_comp['address']
-
     end
 
     it 'SAD: should return error if unknown company requested' do
@@ -62,13 +61,13 @@ describe 'Test Company Handling' do
 
     it 'HAPPY: should be able to create new companies' do
       post 'api/v1/companies', @comp_data.to_json, @req_header
-      
+
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
       created = JSON.parse(last_response.body)['data']['attributes']
       comp = ISSInternship::Company.first
-      
+
       _(created['id']).must_equal comp.id
       _(created['company_no']).must_equal @comp_data['company_no']
       _(created['name']).must_equal @comp_data['name']

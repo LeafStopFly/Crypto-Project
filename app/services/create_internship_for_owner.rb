@@ -6,7 +6,7 @@ module ISSInternship
     def self.call(owner_id:, internship_data:)
       # internship data should be in db
       Account.find(id: owner_id)
-        .add_owned_internship(internship_data)
+             .add_owned_internship(internship_data)
     end
   end
 end
