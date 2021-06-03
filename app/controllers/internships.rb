@@ -24,7 +24,7 @@ module ISSInternship
       routing.get do
         account = Account.first(username: @auth_account['username'])
         internships = account.internships
-        JSON.pretty_generate(internships)
+        JSON.pretty_generate(data: internships)
       rescue StandardError
         routing.halt 404, { message: 'Could not find internships' }.to_json
       end

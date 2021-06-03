@@ -23,8 +23,8 @@ module ISSInternship
       # GET api/v1/interviews
       routing.get do
         account = Account.first(username: @auth_account['username'])
-        interviews = account.interview
-        JSON.pretty_generate(interviews)
+        interviews = account.interviews
+        JSON.pretty_generate(data: interviews)
       rescue StandardError
         routing.halt 404, { message: 'Could not find interviews' }.to_json
       end
