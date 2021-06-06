@@ -18,7 +18,7 @@ describe 'Test Account Handling' do
       get "/api/v1/accounts/#{account.username}"
       _(last_response.status).must_equal 200
 
-      result = JSON.parse(last_response.body)["attributes"]
+      result = JSON.parse(last_response.body)['attributes']
       _(result['username']).must_equal account.username
       _(result['salt']).must_be_nil
       _(result['password']).must_be_nil

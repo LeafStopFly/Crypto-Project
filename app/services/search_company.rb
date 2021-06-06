@@ -14,7 +14,6 @@ module ISSInternship
         end
     end
 
-    
     # Support methods
 
     def self.company_in_api(input)

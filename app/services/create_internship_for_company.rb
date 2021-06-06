@@ -5,7 +5,7 @@ module ISSInternship
   class CreateInternshipForCompany
     def self.call(company_id:, internship_data:)
       Company.first(id: company_id)
-        .add_internship(internship_data)
+             .add_internship(internship_data)
     end
   end
 end

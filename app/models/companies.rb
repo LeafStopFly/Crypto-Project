@@ -13,12 +13,11 @@ module ISSInternship
                  class: :'ISSInternship::Account',
                  join_table: :accounts_companies,
                  left_key: :company_id, right_key: :account_id
-    
-    plugin :association_dependencies, 
+
+    plugin :association_dependencies,
             internships: :destroy,
             interviews: :destroy,
             interns: :nullify
-    
 
     plugin :timestamps
     plugin :whitelist_security

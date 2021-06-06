@@ -19,15 +19,29 @@ module ISSInternship
           routing.halt 404, { message: e.message }.to_json
         end
       end
-  
+
       # GET api/v1/interviews
       routing.get do
-        interviews = Interview.all.map do |each_intern|
-          JSON.parse(each_intern.simplify_to_json)
-        end
-        JSON.pretty_generate(interviews)
+        account = Account.first(username: @auth_account['username'])
+        interviews = account.interviews
+        JSON.pretty_generate(data: interviews)
       rescue StandardError
         routing.halt 404, { message: 'Could not find interviews' }.to_json
+      end
+
+      # POST api/v1/interviews
+      routing.post do
+        new_data = JSON.parse(routing.body.read)
+        new_interv = Interview.new(new_data)
+        raise('Could not save interview') unless new_interv.save
+
+        response.status = 201
+        response['Location'] = "#{@interview_route}/#{new_interv.id}"
+        { message: 'interview saved', data: new_interv }.to_json
+      rescue Sequel::MassAssignmentRestriction
+        routing.halt 400, { message: 'Illegal Request' }.to_json
+      rescue StandardError => e
+        routing.halt 500, { message: e.message }.to_json
       end
     end
   end
