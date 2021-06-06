@@ -37,7 +37,8 @@ module ISSInternship
 
     def html_email
       <<~END_EMAIL
-        <H1>ISS Internship App Registration Received</H1>
+        <H2>ISS Internship App Registration Received</H2>
+        <p>Hi #{@registration[:username]}, </p>
         <p>Please <a href=\"#{@registration[:verification_url]}\">click here</a>
         to validate your email.
         You will be asked to set a password to activate your account.</p>
