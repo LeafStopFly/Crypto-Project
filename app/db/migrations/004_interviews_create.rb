@@ -6,7 +6,6 @@ Sequel.migration do
   change do
     create_table(:interviews) do
       uuid :id, primary_key: true
-      foreign_key :company_id, table: :companies
       foreign_key :owner_id, :accounts
 
       String :position, null: false
@@ -20,6 +19,8 @@ Sequel.migration do
       String :waiting_result_time
       String :advice_secure
       String :iss_module
+      String :company_name
+      Boolean :non_anonymous
 
       DateTime :created_at
       DateTime :updated_at

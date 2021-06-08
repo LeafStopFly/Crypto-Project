@@ -9,7 +9,9 @@
   recruit_source: '104'
   rating: 4.5
   iss_module: '資訊系統'
-  
+  company_name: "台灣積體電路製造股份有限公司"
+  non_anonymous: True
+
 - title: '我在hp的日子'
   position: '軟體工程實習生'
   year: '110'
@@ -20,6 +22,8 @@
   recruit_source: 'Linkedin'
   rating: 4
   iss_module: nil
+  company_name: "台灣惠普資訊科技股份有限公司"
+  non_anonymous: True
 
 - title: '其他'
   position: '軟體工程實習生'
@@ -31,3 +35,5 @@
   recruit_source: 'Linkedin'
   rating: 4
   iss_module: '資訊系統'
+  company_name: "台灣惠普資訊科技股份有限公司"
+  non_anonymous: False

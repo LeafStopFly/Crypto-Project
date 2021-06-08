@@ -7,13 +7,13 @@ module ISSInternship
   # Models a interview
   class Interview < Sequel::Model
     many_to_one :owner, class: :'ISSInternship::Account'
-    many_to_one :companines
 
     plugin :uuid, field: :id
     plugin :timestamps
     plugin :whitelist_security
     set_allowed_columns :position, :time, :interview_location, :level, :recruit_source,
-                        :rating, :result, :description, :waiting_result_time, :advice, :iss_module
+                        :rating, :result, :description, :waiting_result_time, :advice,
+                        :iss_module, :company_name, :non_anonymous
 
     # Secure getters and setters
     def description
@@ -53,27 +53,39 @@ module ISSInternship
       )
     end
 
-    def to_json(options = {})
-      JSON(
-        {
-          type: 'interview',
-          attributes: {
-            id: id,
-            position: position,
-            time: time,
-            interview_location: interview_location,
-            level: level,
-            recruit_source: recruit_source,
-            rating: rating,
-            result: result,
-            description: description,
-            waiting_result_time: waiting_result_time,
-            advice: advice,
-            iss_module: iss_module
-          }
-        }, options
-      )
+    def to_h
+      {
+        type: 'interview',
+        attributes: {
+          id: id,
+          position: position,
+          time: time,
+          interview_location: interview_location,
+          level: level,
+          recruit_source: recruit_source,
+          rating: rating,
+          result: result,
+          description: description,
+          waiting_result_time: waiting_result_time,
+          advice: advice,
+          iss_module: iss_module,
+          company_name: company_name,
+          non_anonymous: non_anonymous
+        }
+      }
     end
     # rubocop:enable Metrics/MethodLength
+
+    def full_details
+      to_h.merge(
+        relationships: {
+          owner: owner
+        }
+      )
+    end
+
+    def to_json(options = {})
+      JSON(to_h, options)
+    end
   end
 end

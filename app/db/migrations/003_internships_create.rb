@@ -6,7 +6,6 @@ Sequel.migration do
   change do
     create_table(:internships) do
       uuid :id, primary_key: true
-      foreign_key :company_id, table: :companies
       foreign_key :owner_id, :accounts
 
       String :title, null: false
@@ -19,6 +18,8 @@ Sequel.migration do
       String :recruit_source
       Float :rating, null: false
       String :iss_module
+      String :company_name
+      Boolean :non_anonymous
 
       DateTime :created_at
       DateTime :updated_at

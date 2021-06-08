@@ -41,10 +41,6 @@ module ISSInternship
               {
                 rel: 'company_related_interviews',
                 href: "#{Api.config.API_HOST}/api/v1/companies/#{id}/interviews"
-              },
-              {
-                rel: 'companies_related_interns',
-                href: "#{Api.config.API_HOST}/api/v1/companies/#{id}/interns"
               }
             ]
           }

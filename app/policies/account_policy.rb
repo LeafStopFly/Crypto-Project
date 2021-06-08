@@ -7,9 +7,10 @@ class AccountPolicy
       @account = account
     end
   
-    # def can_view?
-    #   self_request?
-    # end
+    # everyone can view post
+    def can_view?
+      self_request?
+    end
   
     def can_edit?
       self_request?
@@ -28,7 +29,7 @@ class AccountPolicy
         # can_view: can_view?,
         can_edit: can_edit?,
         can_delete: can_delete?,
-        can_view_post_authorcan_view_post_author?
+        can_view_post_author: can_view_post_author?
       }
     end
   

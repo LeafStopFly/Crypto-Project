@@ -13,17 +13,58 @@ module ISSInternship
       routing.on String do |interview_id|
         # GET api/v1/interviews/[interview_id]
         routing.get do
-          interview = Interview.first(id: interview_id)
-          interview ? interview.to_json : raise('Interview not found')
-        rescue StandardError => e
+          @req_interview = Interview.first(id: interview_id)
+
+          interview = GetInterviewQuery.call(
+            account: @auth_account, interview: @req_interview
+          )
+
+          { data: interview }.to_json
+        rescue GetInterviewQuery::ForbiddenError => e
+          routing.halt 403, { message: e.message }.to_json
+        rescue GetInterviewQuery::NotFoundError => e
           routing.halt 404, { message: e.message }.to_json
+        rescue StandardError => e
+          puts "FIND INTERVIEW ERROR: #{e.inspect}"
+          routing.halt 500, { message: 'API server error' }.to_json
+        end
+
+        # PUT api/v1/interviews/[interview_id]
+        routing.put do
+          # req_data = JSON.parse(routing.body.read)
+          interview = EditInterview.call(
+            req_username: @auth_account.username,
+            inter_id: interview_id
+          )
+
+          { message: "#{interview.position} edited.",
+            data: interview }.to_json
+        rescue DeleteInterview::ForbiddenError => e
+          routing.halt 403, { message: e.message }.to_json
+        rescue StandardError
+          routing.halt 500, { message: 'API server error' }.to_json
+        end
+
+        # DELETE api/v1/interviews/[interview_id]
+        routing.delete do
+          # req_data = JSON.parse(routing.body.read)
+          interview = DeleteInterview.call(
+            req_username: @auth_account.username,
+            inter_id: interview_id
+          )
+
+          { message: "#{interview.position} deleted.",
+            data: interview }.to_json
+        rescue DeleteInterview::ForbiddenError => e
+          routing.halt 403, { message: e.message }.to_json
+        rescue StandardError
+          routing.halt 500, { message: 'API server error' }.to_json
         end
       end
 
       # GET api/v1/interviews
       routing.get do
-        account = Account.first(username: @auth_account['username'])
-        interviews = account.interviews
+        interviews = Interview.all
         JSON.pretty_generate(data: interviews)
       rescue StandardError
         routing.halt 404, { message: 'Could not find interviews' }.to_json
@@ -32,7 +73,7 @@ module ISSInternship
       # POST api/v1/interviews
       routing.post do
         new_data = JSON.parse(routing.body.read)
-        new_interv = Interview.new(new_data)
+        new_interv = @auth_account.add_owned_interview(new_data)
         raise('Could not save interview') unless new_interv.save
 
         response.status = 201
