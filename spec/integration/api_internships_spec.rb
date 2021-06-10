@@ -33,8 +33,16 @@ describe 'Test Internship Handling' do
         _(result['data'].count).must_equal 2
       end
 
-      it 'HAPPY: everyone should get process for unauthorized account' do
+      it 'BAD: should not process without authorization' do
         get 'api/v1/internships'
+        _(last_response.status).must_equal 403
+
+        result = JSON.parse last_response.body
+        _(result['data']).must_be_nil
+      end
+
+      it 'HAPPY: everyone should get process for unauthorized account' do
+        get 'api/v1/all_internships'
         _(last_response.status).must_equal 200
 
         result = JSON.parse last_response.body

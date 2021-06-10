@@ -17,14 +17,16 @@ All routes return Json
 - GET `api/v1/internships/[internship_id]`: Get an internship reactionary
 - PUT `api/v1/internships/[internship_id]`: Update an internship reactionary
 - DELETE `api/v1/internships/[internship_id]`: Delete an internship reactionary
-- GET `api/v1/internships`: Get list of all internships
+- GET `api/v1/internships/all`: Get list of all internships
+- GET `api/v1/internships`: Get list of all that owner internships
 - POST `api/v1/internships`: Create an internship reactionary
 
 
 - GET `api/v1/interviews/[interview_id]`: Get an interview reactionary
 - PUT `api/v1/interviews/[interview_id]`: Update an interview reactionary
 - DELETE `api/v1/interviews/[interview_id]`: Delete an interview reactionary
-- GET `api/v1/interviews`: Get list of all interviews
+- GET `api/v1/interviews/all`: Get list of all interviews
+- GET `api/v1/interviews`: Get list of all that owner interviews
 - POST `api/v1/interviews`: Create an interview reactionary
 
 ## Install

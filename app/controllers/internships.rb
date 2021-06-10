@@ -31,7 +31,6 @@ module ISSInternship
 
         # PUT api/v1/internships/[internship_id]
         routing.put do
-          # req_data = JSON.parse(routing.body.read)
           internship = EditInternship.call(
             req_username: @auth_account.username,
             inter_id: internship_id
@@ -47,7 +46,6 @@ module ISSInternship
 
         # DELETE api/v1/internships/[internship_id]
         routing.delete do
-          # req_data = JSON.parse(routing.body.read)
           internship = DeleteInternship.call(
             req_username: @auth_account.username,
             inter_id: internship_id
@@ -64,10 +62,10 @@ module ISSInternship
 
       # GET api/v1/internships
       routing.get do
-        internships = Internship.all
+        internships = InternshipPolicy::AccountScope.new(@auth_account).viewable
         JSON.pretty_generate(data: internships)
       rescue StandardError
-        routing.halt 404, { message: 'Could not find internships' }.to_json
+        routing.halt 403, { message: 'Could not find internships' }.to_json
       end
 
       # POST api/v1/internships

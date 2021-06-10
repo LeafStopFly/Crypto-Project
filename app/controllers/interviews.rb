@@ -64,10 +64,10 @@ module ISSInternship
 
       # GET api/v1/interviews
       routing.get do
-        interviews = Interview.all
+        interviews = InterviewPolicy::AccountScope.new(@auth_account).viewable
         JSON.pretty_generate(data: interviews)
       rescue StandardError
-        routing.halt 404, { message: 'Could not find interviews' }.to_json
+        routing.halt 403, { message: 'Could not find interviews' }.to_json
       end
 
       # POST api/v1/interviews
