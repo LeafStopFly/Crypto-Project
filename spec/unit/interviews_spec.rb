@@ -6,15 +6,16 @@ describe 'Test Intership Handling' do
   before do
     wipe_database
 
-    DATA[:companies].each do |company_data|
-      ISSInternship::Company.create(company_data)
+    DATA[:accounts].each do |account|
+      ISSInternship::Account.create(account)
     end
   end
 
   it 'HAPPY: should retrieve correct data from database' do
     interv_data = DATA[:interviews][1]
-    comp = ISSInternship::Company.first
-    new_interv = comp.add_interview(interv_data)
+    owner = ISSInternship::Account.first
+
+    new_interv = owner.add_owned_interview(interv_data)
 
     interv = ISSInternship::Interview.find(id: new_interv.id)
     _(interv.id).must_equal new_interv.id
@@ -29,20 +30,23 @@ describe 'Test Intership Handling' do
     _(interv.waiting_result_time).must_equal new_interv.waiting_result_time
     _(interv.advice).must_equal new_interv.advice
     _(interv.iss_module).must_equal new_interv.iss_module
+    _(interv.company_name).must_equal new_interv.company_name
+    _(interv.non_anonymous).must_equal new_interv.non_anonymous
   end
 
   it 'SECURITY: should not use deterministic integers as ID' do
     interv_data = DATA[:interviews][1]
-    comp = ISSInternship::Company.first
-    new_interv = comp.add_interview(interv_data)
+    owner = ISSInternship::Account.first
+    new_interv = owner.add_owned_interview(interv_data)
 
     _(new_interv.id.is_a?(Numeric)).must_equal false
   end
 
   it 'SECURITY: should secure sensitive attributes' do
     interv_data = DATA[:interviews][1]
-    comp = ISSInternship::Company.first
-    new_interv = comp.add_interview(interv_data)
+    owner = ISSInternship::Account.first
+    new_interv = owner.add_owned_interview(interv_data)
+
     stored_interv = app.DB[:interviews].first
 
     _(stored_interv[:description_secure]).wont_equal new_interv.description

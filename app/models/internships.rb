@@ -7,13 +7,12 @@ module ISSInternship
   # Models a internship
   class Internship < Sequel::Model
     many_to_one :owner, class: :'ISSInternship::Account'
-    many_to_one :companines
 
     plugin :uuid, field: :id
     plugin :timestamps
     plugin :whitelist_security
-    set_allowed_columns :title, :position, :year, :period, :job_description,
-                        :salary, :reactionary, :recruit_source, :rating, :iss_module
+    set_allowed_columns :title, :position, :year, :period, :job_description, :salary, :reactionary,
+                        :recruit_source, :rating, :iss_module, :company_name, :non_anonymous
 
     # Secure getters and setters
     def job_description
@@ -56,26 +55,38 @@ module ISSInternship
     # rubocop:enable Metrics/MethodLength
 
     # rubocop:disable Metrics/MethodLength
-    def to_json(options = {})
-      JSON(
-        {
-          type: 'internship',
-          attributes: {
-            id: id,
-            title: title,
-            position: position,
-            year: year,
-            period: period,
-            job_description: job_description,
-            salary: salary,
-            reactionary: reactionary,
-            recruit_source: recruit_source,
-            rating: rating,
-            iss_module: iss_module
-          }
-        }, options
-      )
+    def to_h
+      {
+        type: 'internship',
+        attributes: {
+          id: id,
+          title: title,
+          position: position,
+          year: year,
+          period: period,
+          job_description: job_description,
+          salary: salary,
+          reactionary: reactionary,
+          recruit_source: recruit_source,
+          rating: rating,
+          iss_module: iss_module,
+          company_name: company_name,
+          non_anonymous: non_anonymous
+        }
+      }
     end
     # rubocop:enable Metrics/MethodLength
+
+    def full_details
+      to_h.merge(
+        relationships: {
+          owner: owner
+        }
+      )
+    end
+
+    def to_json(options = {})
+      JSON(to_h, options)
+    end
   end
 end

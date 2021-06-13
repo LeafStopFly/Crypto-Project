@@ -15,9 +15,9 @@ module ISSInternship
                  left_key: :company_id, right_key: :account_id
 
     plugin :association_dependencies,
-            internships: :destroy,
-            interviews: :destroy,
-            interns: :nullify
+           internships: :destroy,
+           interviews: :destroy,
+           interns: :nullify
 
     plugin :timestamps
     plugin :whitelist_security
@@ -41,10 +41,6 @@ module ISSInternship
               {
                 rel: 'company_related_interviews',
                 href: "#{Api.config.API_HOST}/api/v1/companies/#{id}/interviews"
-              },
-              {
-                rel: 'companies_related_interns',
-                href: "#{Api.config.API_HOST}/api/v1/companies/#{id}/interns"
               }
             ]
           }

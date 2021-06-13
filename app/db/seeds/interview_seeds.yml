@@ -10,6 +10,8 @@
   waiting_result_time: '無聲卡'
   advice: '別去'
   iss_module: '資訊系統'
+  company_name: "台灣積體電路製造股份有限公司"
+  non_anonymous: False
 
 - position: 'UIUX實習生'
   time: '109.05'
@@ -22,6 +24,8 @@
   waiting_result_time: '3-5天'
   advice: nil
   iss_module: '服務設計與創新'
+  company_name: "台灣惠普資訊科技股份有限公司"
+  non_anonymous: True
 
 - position: 'Other'
   time: '109.05'
@@ -34,3 +38,5 @@
   waiting_result_time: '3-5天'
   advice: nil
   iss_module: '服務設計與創新'
+  company_name: "台灣惠普資訊科技股份有限公司"
+  non_anonymous: True

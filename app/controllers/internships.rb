@@ -11,28 +11,67 @@ module ISSInternship
       @internship_route = "#{@api_root}/internships"
 
       routing.on String do |internship_id|
+        @req_internship = Internship.first(id: internship_id)
+
         # GET api/v1/internships/[internship_id]
         routing.get do
-          internship = Internship.first(id: internship_id)
-          internship ? internship.to_json : raise('Internship not found')
-        rescue StandardError => e
+          internship = GetInternshipQuery.call(
+            account: @auth_account, internship: @req_internship
+          )
+
+          { data: internship }.to_json
+        rescue GetInternshipQuery::ForbiddenError => e
+          routing.halt 403, { message: e.message }.to_json
+        rescue GetInternshipQuery::NotFoundError => e
           routing.halt 404, { message: e.message }.to_json
+        rescue StandardError => e
+          puts "FIND INTERNSHIP ERROR: #{e.inspect}"
+          routing.halt 500, { message: 'API server error' }.to_json
+        end
+
+        # PUT api/v1/internships/[internship_id]
+        routing.put do
+          internship = EditInternship.call(
+            req_username: @auth_account.username,
+            inter_id: internship_id
+          )
+
+          { message: "#{internship.title} edited.",
+            data: internship }.to_json
+        rescue DeleteInternship::ForbiddenError => e
+          routing.halt 403, { message: e.message }.to_json
+        rescue StandardError
+          routing.halt 500, { message: 'API server error' }.to_json
+        end
+
+        # DELETE api/v1/internships/[internship_id]
+        routing.delete do
+          internship = DeleteInternship.call(
+            req_username: @auth_account.username,
+            inter_id: internship_id
+          )
+
+          { message: "#{internship.title} deleted.",
+            data: internship }.to_json
+        rescue DeleteInternship::ForbiddenError => e
+          routing.halt 403, { message: e.message }.to_json
+        rescue StandardError
+          routing.halt 500, { message: 'API server error' }.to_json
         end
       end
 
       # GET api/v1/internships
       routing.get do
-        account = Account.first(username: @auth_account['username'])
-        internships = account.internships
+        internships = InternshipPolicy::AccountScope.new(@auth_account).viewable
         JSON.pretty_generate(data: internships)
       rescue StandardError
-        routing.halt 404, { message: 'Could not find internships' }.to_json
+        routing.halt 403, { message: 'Could not find internships' }.to_json
       end
 
       # POST api/v1/internships
       routing.post do
         new_data = JSON.parse(routing.body.read)
-        new_intern = Internship.new(new_data)
+        new_intern = @auth_account.add_owned_internship(new_data)
         raise('Could not save internship') unless new_intern.save
 
         response.status = 201
