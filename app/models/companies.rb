@@ -15,9 +15,9 @@ module ISSInternship
                  left_key: :company_id, right_key: :account_id
 
     plugin :association_dependencies,
-            internships: :destroy,
-            interviews: :destroy,
-            interns: :nullify
+           internships: :destroy,
+           interviews: :destroy,
+           interns: :nullify
 
     plugin :timestamps
     plugin :whitelist_security
