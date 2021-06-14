@@ -15,14 +15,29 @@ def wipe_database
   app.DB[:accounts].delete
 end
 
-def auth_header(account_data)
-  auth = ISSInternship::AuthenticateAccount.call(
+def authenticate(account_data)
+  ISSInternship::AuthenticateAccount.call(
     username: account_data['username'],
     password: account_data['password']
   )
+end
+
+def auth_header(account_data)
+  auth = authenticate(account_data)
 
   "Bearer #{auth[:attributes][:auth_token]}"
 end
+
+def authorization(account_data)
+  auth = authenticate(account_data)
+
+  contents = AuthToken.contents(auth[:attributes][:auth_token])
+  account = contents['attributes']
+  # account = contents['payload']['attributes']
+  { account: ISSInternship::Account.first(username: account['username']),
+    scope: AuthScope.new(contents['scope']) }
+end
+
 
 DATA = {
   accounts: YAML.load(File.read('app/db/seeds/accounts_seeds.yml')),

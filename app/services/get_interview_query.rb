@@ -17,11 +17,11 @@ module ISSInternship
       end
     end
 
-    def self.call(account:, interview:)
+    def self.call(auth:, interview:)
       raise NotFoundError unless interview
 
-      policy = InterviewPolicy.new(account, interview)
-    #   raise ForbiddenError unless policy.can_view?
+      policy = InterviewPolicy.new(auth[:account], interview, auth[:scope])
+      # raise ForbiddenError unless policy.can_view?
 
       interview.full_details.merge(policies: policy.summary)
     end

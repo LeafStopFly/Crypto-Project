@@ -10,14 +10,12 @@ module ISSInternship
       end
     end
 
-    def self.call(req_username:, inter_id:)
-      account = Account.first(username: req_username)
+    def self.call(auth:, inter_id:)
       interview = Interview.first(id: inter_id)
 
-      policy = InterviewPolicy.new(account, interview)
+      policy = InterviewPolicy.new(auth[:account], interview, auth[:scope])
       raise ForbiddenError unless policy.can_edit?
-    
-      # TODO update will fail
+
       Interview.update(interview.to_h[:attributes])
       interview
     end

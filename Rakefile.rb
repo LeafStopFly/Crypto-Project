@@ -55,7 +55,7 @@ namespace :db do
   end
 
   task :load_models => :load do
-    require_app(%w[lib models services get_company])
+    require_app(%w[lib models services policies get_company])
   end
 
   desc 'Run migrations'

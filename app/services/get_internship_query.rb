@@ -17,11 +17,10 @@ module ISSInternship
       end
     end
 
-    def self.call(account:, internship:)
+    def self.call(auth:, internship:)
       raise NotFoundError unless internship
 
-      
-      policy = InternshipPolicy.new(account, internship)
+      policy = InternshipPolicy.new(auth[:account], internship, auth[:scope])
       # raise ForbiddenError unless policy.can_view?
 
       internship.full_details.merge(policies: policy.summary)

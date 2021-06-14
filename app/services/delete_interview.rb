@@ -10,15 +10,13 @@ module ISSInternship
       end
     end
 
-    # ISSInterview::Account.where(id:1).first.update(email: "123")
-    def self.call(req_username:, inter_id:)
-      account = Account.first(username: req_username)
+    def self.call(auth:, inter_id:)
       interview = Interview.first(id: inter_id)
 
-      policy = InterviewPolicy.new(account, interview)
+      policy = InterviewPolicy.new(auth[:account], interview, auth[:scope])
       raise ForbiddenError unless policy.can_delete?
 
-      account.remove_owned_interview(interview)
+      auth[:account].remove_owned_interview(interview)
       interview
     end
   end

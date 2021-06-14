@@ -16,7 +16,7 @@ module ISSInternship
           @req_interview = Interview.first(id: interview_id)
 
           interview = GetInterviewQuery.call(
-            account: @auth_account, interview: @req_interview
+            auth: @auth, interview: @req_interview
           )
 
           { data: interview }.to_json
@@ -32,8 +32,9 @@ module ISSInternship
         # PUT api/v1/interviews/[interview_id]
         routing.put do
           # req_data = JSON.parse(routing.body.read)
+          routing.halt(403, UNAUTH_MSG) unless @auth_account
           interview = EditInterview.call(
-            req_username: @auth_account.username,
+            auth: @auth,
             inter_id: interview_id
           )
 
@@ -48,8 +49,9 @@ module ISSInternship
         # DELETE api/v1/interviews/[interview_id]
         routing.delete do
           # req_data = JSON.parse(routing.body.read)
+          routing.halt(403, UNAUTH_MSG) unless @auth_account
           interview = DeleteInterview.call(
-            req_username: @auth_account.username,
+            auth: @auth,
             inter_id: interview_id
           )
 
@@ -72,8 +74,11 @@ module ISSInternship
 
       # POST api/v1/interviews
       routing.post do
+        routing.halt(403, UNAUTH_MSG) unless @auth_account
         new_data = JSON.parse(routing.body.read)
-        new_interv = @auth_account.add_owned_interview(new_data)
+        new_interv = CreateInterviewForOwner.call(
+          auth: @auth, interview_data: new_data
+        )
         raise('Could not save interview') unless new_interv.save
 
         response.status = 201
