@@ -40,11 +40,12 @@ describe 'Test Authentication Routes' do
 
       result = JSON.parse(last_response.body)
 
-      _(last_response.status).must_equal 403
+      _(last_response.status).must_equal 401
       _(result['message']).wont_be_nil
       _(result['attributes']).must_be_nil
     end
   end
+
   describe 'SSO Authorization' do
     before do
       WebMock.enable!
