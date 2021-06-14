@@ -51,6 +51,7 @@ module ISSInternship
       JSON(
         {
           type: 'account',
+          id: id,
           attributes: {
             username: username,
             email: email

@@ -9,10 +9,10 @@ require 'yaml'
 require_relative 'test_load_all'
 
 def wipe_database
-  ISSInternship::Internship.map(&:destroy)
-  ISSInternship::Interview.map(&:destroy)
-  ISSInternship::Company.map(&:destroy)
-  ISSInternship::Account.map(&:destroy)
+  app.DB[:internships].delete
+  app.DB[:interviews].delete
+  app.DB[:companies].delete
+  app.DB[:accounts].delete
 end
 
 def authenticate(account_data)
