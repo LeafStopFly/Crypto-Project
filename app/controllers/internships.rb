@@ -16,7 +16,7 @@ module ISSInternship
         # GET api/v1/internships/[internship_id]
         routing.get do
           internship = GetInternshipQuery.call(
-            account: @auth_account, internship: @req_internship
+            auth: @auth, internship: @req_internship
           )
 
           { data: internship }.to_json
@@ -31,8 +31,9 @@ module ISSInternship
 
         # PUT api/v1/internships/[internship_id]
         routing.put do
+          routing.halt(403, UNAUTH_MSG) unless @auth_account
           internship = EditInternship.call(
-            req_username: @auth_account.username,
+            auth: @auth,
             inter_id: internship_id
           )
 
@@ -46,8 +47,9 @@ module ISSInternship
 
         # DELETE api/v1/internships/[internship_id]
         routing.delete do
+          routing.halt(403, UNAUTH_MSG) unless @auth_account
           internship = DeleteInternship.call(
-            req_username: @auth_account.username,
+            auth: @auth,
             inter_id: internship_id
           )
 
@@ -70,8 +72,11 @@ module ISSInternship
 
       # POST api/v1/internships
       routing.post do
+        routing.halt(403, UNAUTH_MSG) unless @auth_account
         new_data = JSON.parse(routing.body.read)
-        new_intern = @auth_account.add_owned_internship(new_data)
+        new_intern = CreateInternshipForOwner.call(
+          auth: @auth, internship_data: new_data
+        )
         raise('Could not save internship') unless new_intern.save
 
         response.status = 201

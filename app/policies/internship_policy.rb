@@ -3,9 +3,10 @@
 module ISSInternship
   # Policy to determine if an account can view a particular internship
   class InternshipPolicy
-    def initialize(account, internship)
+    def initialize(account, internship, auth_scope = nil)
       @account = account
       @internship = internship
+      @auth_scope = auth_scope
     end
 
     # everyone can view
@@ -15,15 +16,15 @@ module ISSInternship
 
     # duplication is ok!
     def can_edit?
-      account_is_owner?
+      can_write? && account_is_owner?
     end
 
     def can_delete?
-      account_is_owner?
+      can_write? && account_is_owner?
     end
 
     def can_view_post_author?
-      account_is_owner? || internship_is_non_anonymous?
+      can_read? && (account_is_owner? || internship_is_non_anonymous?)
     end
 
     def summary
@@ -36,6 +37,14 @@ module ISSInternship
     end
 
     private
+
+    def can_read?
+      @auth_scope ? @auth_scope.can_read?('internships') : false
+    end
+
+    def can_write?
+      @auth_scope ? @auth_scope.can_write?('internships') : false
+    end
 
     def account_is_owner?
       @internship.owner == @account

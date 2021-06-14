@@ -54,6 +54,7 @@ describe 'Test Interview Handling' do
       interv_data = @account.add_owned_interview(DATA[:interviews][0])
       id = interv_data.id
 
+      header 'AUTHORIZATION', auth_header(@account_data)
       get "/api/v1/interviews/#{id}"
       _(last_response.status).must_equal 200
 

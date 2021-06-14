@@ -42,9 +42,7 @@ def create_owned_internships
     account = ISSInternship::Account.first(username: owner['username'])
     owner['intern_name'].each do |intern_name|
       intern_data = INTERNSHIP_INFO.find { |intern| intern['title'] == intern_name }
-      ISSInternship::CreateInternshipForOwner.call(
-        owner_id: account.id, internship_data: intern_data
-      )
+      account.add_owned_internship(intern_data)
     end
   end
 end
@@ -54,9 +52,7 @@ def create_owned_interviews
     account = ISSInternship::Account.first(username: owner['username'])
     owner['interv_name'].each do |interv_name|
       interv_data = INTERVIEW_INFO.find { |interv| interv['position'] == interv_name }
-      ISSInternship::CreateInterviewForOwner.call(
-        owner_id: account.id, interview_data: interv_data
-      )
+      account.add_owned_interview(interv_data)
     end
   end
 end

@@ -53,6 +53,7 @@ describe 'Test Internship Handling' do
     it 'HAPPY: should be able to get details of a single internship' do
       intern_data = @account.add_owned_internship(DATA[:internships][0])
       id = intern_data.id
+      header 'AUTHORIZATION', auth_header(@account_data)
       get "/api/v1/internships/#{id}"
       _(last_response.status).must_equal 200
 
@@ -95,7 +96,7 @@ describe 'Test Internship Handling' do
     before do
       @intern_data = DATA[:internships][1]
     end
-    
+
     it 'HAPPY: should be able to create new internships' do
       header 'AUTHORIZATION', auth_header(@account_data)
       post "api/v1/internships", @intern_data.to_json

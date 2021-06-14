@@ -10,14 +10,12 @@ module ISSInternship
       end
     end
 
-    def self.call(req_username:, inter_id:)
-      account = Account.first(username: req_username)
+    def self.call(auth:, inter_id:)
       internship = Internship.first(id: inter_id)
 
-      policy = InternshipPolicy.new(account, internship)
+      policy = InternshipPolicy.new(auth[:account], internship, auth[:scope])
       raise ForbiddenError unless policy.can_edit?
-    
-      # TODO update will fail
+
       Internship.update(internship.to_h[:attributes])
       internship
     end
