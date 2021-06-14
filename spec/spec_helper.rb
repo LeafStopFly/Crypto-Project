@@ -9,10 +9,10 @@ require 'yaml'
 require_relative 'test_load_all'
 
 def wipe_database
-  app.DB[:internships].delete
-  app.DB[:interviews].delete
-  app.DB[:companies].delete
-  app.DB[:accounts].delete
+  ISSInternship::Internship.map(&:destroy)
+  ISSInternship::Interview.map(&:destroy)
+  ISSInternship::Company.map(&:destroy)
+  ISSInternship::Account.map(&:destroy)
 end
 
 def authenticate(account_data)
@@ -38,10 +38,16 @@ def authorization(account_data)
     scope: AuthScope.new(contents['scope']) }
 end
 
-
 DATA = {
   accounts: YAML.load(File.read('app/db/seeds/accounts_seeds.yml')),
   companies: YAML.load(File.read('app/db/seeds/companies_seeds.yml')),
   internships: YAML.load(File.read('app/db/seeds/internship_seeds.yml')),
   interviews: YAML.load(File.read('app/db/seeds/interview_seeds.yml'))
 }.freeze
+
+## SSO fixtures
+GH_ACCOUNT_RESPONSE = YAML.load(
+  File.read('spec/fixtures/github_token_response.yml')
+)
+GOOD_GH_ACCESS_TOKEN = GH_ACCOUNT_RESPONSE.keys.first
+SSO_ACCOUNT = YAML.load(File.read('spec/fixtures/sso_account.yml'))
