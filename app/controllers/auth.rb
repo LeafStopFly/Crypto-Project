@@ -44,7 +44,7 @@ module ISSInternship
         { data: auth_account }.to_json
       rescue StandardError => e
         puts "FAILED to validate Github account: #{e.inspect}"
-        puts error.backtrace
+        puts e.backtrace
         routing.halt 400
       end
     end

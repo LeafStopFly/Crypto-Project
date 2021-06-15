@@ -32,7 +32,6 @@ module ISSInternship
       end
 
       routing.root do
-        response.status = 200
         { message: 'ISS InternshipAPI up at /api/v1' }.to_json
       end
 
