@@ -16,14 +16,19 @@ module ISSInternship
                  left_key: :account_id, right_key: :company_id
 
     plugin :association_dependencies,
-            owned_internships: :destroy,
-            owned_interviews: :destroy,
-            interns: :nullify
+           owned_internships: :destroy,
+           owned_interviews: :destroy,
+           interns: :nullify
 
     plugin :whitelist_security
     set_allowed_columns :username, :email, :password
 
     plugin :timestamps, update_on_create: true
+
+    def self.create_github_account(github_account)
+      create(username: github_account[:username],
+             email: github_account[:email])
+    end
 
     def internships
       owned_internships

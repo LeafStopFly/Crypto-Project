@@ -38,10 +38,16 @@ def authorization(account_data)
     scope: AuthScope.new(contents['scope']) }
 end
 
-
 DATA = {
   accounts: YAML.load(File.read('app/db/seeds/accounts_seeds.yml')),
   companies: YAML.load(File.read('app/db/seeds/companies_seeds.yml')),
   internships: YAML.load(File.read('app/db/seeds/internship_seeds.yml')),
   interviews: YAML.load(File.read('app/db/seeds/interview_seeds.yml'))
 }.freeze
+
+## SSO fixtures
+GH_ACCOUNT_RESPONSE = YAML.load(
+  File.read('spec/fixtures/github_token_response.yml')
+)
+GOOD_GH_ACCESS_TOKEN = GH_ACCOUNT_RESPONSE.keys.first
+SSO_ACCOUNT = YAML.load(File.read('spec/fixtures/sso_account.yml'))
