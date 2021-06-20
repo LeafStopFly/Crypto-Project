@@ -71,7 +71,8 @@ module ISSInternship
           rating: rating,
           iss_module: iss_module,
           company_name: company_name,
-          non_anonymous: non_anonymous
+          non_anonymous: non_anonymous,
+          author: author_name
         }
       }
     end
@@ -87,6 +88,14 @@ module ISSInternship
 
     def to_json(options = {})
       JSON(to_h, options)
+    end
+
+    def author_name
+      if non_anonymous
+        owner.username
+      else
+        "Anonymous"
+      end
     end
   end
 end
