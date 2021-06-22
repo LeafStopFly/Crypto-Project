@@ -32,7 +32,7 @@ module ISSInternship
         # POST api/v1/interviews/[interview_id]
         routing.post do
           routing.halt(403, UNAUTH_MSG) unless @auth_account
-          
+
           new_data = JSON.parse(routing.body.read)
           interview = EditInterview.call(
             auth: @auth,

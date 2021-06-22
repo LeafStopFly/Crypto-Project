@@ -93,7 +93,7 @@ module ISSInternship
       if non_anonymous
         owner.username
       else
-        "Anonymous"
+        'Anonymous'
       end
     end
   end

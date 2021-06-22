@@ -31,8 +31,6 @@ module ISSInternship
 
       # Database Setup
       DB = Sequel.connect(ENV.delete('DATABASE_URL') + '?encoding=utf8')
-      # DB = Sequel.mysql(database: ENV.delete('DATABASE_URL'), encoding: "utf8")
-      # def self.DB() = DB # rubocop:disable Naming/MethodName
       def self.DB()
         DB
       end

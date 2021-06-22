@@ -6,7 +6,7 @@ require_relative './app'
 module ISSInternship
   # Web controller for Internship API
   class Api < Roda
-    route('auth') do |routing| # rubocop:disable Metrics/BlockLength
+    route('auth') do |routing|
       # All requests in this route require signed requests
       begin
         @request_data = SignedRequest.new(Api.config).parse(request.body.read)

@@ -88,7 +88,7 @@ describe 'Test Internship Handling' do
 
       # deliberately not reporting error -- don't give attacker information
       _(last_response.status).must_equal 404
-      _(last_response.body['data']).must_be_nil 
+      _(last_response.body['data']).must_be_nil
     end
   end
 
@@ -99,7 +99,7 @@ describe 'Test Internship Handling' do
 
     it 'HAPPY: should be able to create new internships' do
       header 'AUTHORIZATION', auth_header(@account_data)
-      post "api/v1/internships", @intern_data.to_json
+      post 'api/v1/internships', @intern_data.to_json
 
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
@@ -126,7 +126,7 @@ describe 'Test Internship Handling' do
       bad_data['created_at'] = '1900-01-01'
 
       header 'AUTHORIZATION', auth_header(@account_data)
-      post "api/v1/internships", bad_data.to_json
+      post 'api/v1/internships', bad_data.to_json
 
       _(last_response.status).must_equal 400
       _(last_response.header['Location']).must_be_nil
