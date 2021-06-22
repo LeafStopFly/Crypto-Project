@@ -15,11 +15,11 @@ module ISSInternship
         routing.get do
           @req_interview = Interview.first(id: interview_id)
 
-          interview = GetInterviewQuery.call(
-            auth: @auth, interview: @req_interview
-          )
+          # interview = GetInterviewQuery.call(
+          #   auth: @auth, interview: @req_interview
+          # )
 
-          { data: interview }.to_json
+          { data: @req_interview }.to_json
         rescue GetInterviewQuery::ForbiddenError => e
           routing.halt 403, { message: e.message }.to_json
         rescue GetInterviewQuery::NotFoundError => e

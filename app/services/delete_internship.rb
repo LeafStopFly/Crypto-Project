@@ -16,7 +16,8 @@ module ISSInternship
       policy = InternshipPolicy.new(auth[:account], internship, auth[:scope])
       raise ForbiddenError unless policy.can_delete?
 
-      auth[:account].remove_owned_internship(internship)
+      # auth[:account].remove_owned_internship(internship)
+      internship.destroy
       internship
     end
   end
