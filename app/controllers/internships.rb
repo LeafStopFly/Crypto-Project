@@ -15,11 +15,11 @@ module ISSInternship
 
         # GET api/v1/internships/[internship_id]
         routing.get do
-          internship = GetInternshipQuery.call(
-            auth: @auth, internship: @req_internship
-          )
+          # internship = GetInternshipQuery.call(
+          #   auth: @auth, internship: @req_internship
+          # )
 
-          { data: internship }.to_json
+          { data: @req_internship }.to_json
         rescue GetInternshipQuery::ForbiddenError => e
           routing.halt 403, { message: e.message }.to_json
         rescue GetInternshipQuery::NotFoundError => e
@@ -29,17 +29,20 @@ module ISSInternship
           routing.halt 500, { message: 'API server error' }.to_json
         end
 
-        # PUT api/v1/internships/[internship_id]
-        routing.put do
+        # POST api/v1/internships/[internship_id]
+        routing.post do
           routing.halt(403, UNAUTH_MSG) unless @auth_account
+
+          new_data = JSON.parse(routing.body.read)
           internship = EditInternship.call(
             auth: @auth,
+            new_intern: new_data,
             inter_id: internship_id
           )
 
           { message: "#{internship.title} edited.",
             data: internship }.to_json
-        rescue DeleteInternship::ForbiddenError => e
+        rescue EditInternship::ForbiddenError => e
           routing.halt 403, { message: e.message }.to_json
         rescue StandardError
           routing.halt 500, { message: 'API server error' }.to_json
@@ -47,7 +50,7 @@ module ISSInternship
 
         # DELETE api/v1/internships/[internship_id]
         routing.delete do
-          routing.halt(403, UNAUTH_MSG) unless @auth_account
+          
           internship = DeleteInternship.call(
             auth: @auth,
             inter_id: internship_id

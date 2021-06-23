@@ -29,7 +29,7 @@ module ISSInternship
 
     def summary
       {
-      #   can_view: can_view?,
+        # can_view: can_view?,
         can_edit: can_edit?,
         can_delete: can_delete?,
         can_view_post_author: can_view_post_author?

@@ -15,11 +15,11 @@ module ISSInternship
         routing.get do
           @req_interview = Interview.first(id: interview_id)
 
-          interview = GetInterviewQuery.call(
-            auth: @auth, interview: @req_interview
-          )
+          # interview = GetInterviewQuery.call(
+          #   auth: @auth, interview: @req_interview
+          # )
 
-          { data: interview }.to_json
+          { data: @req_interview }.to_json
         rescue GetInterviewQuery::ForbiddenError => e
           routing.halt 403, { message: e.message }.to_json
         rescue GetInterviewQuery::NotFoundError => e
@@ -29,18 +29,20 @@ module ISSInternship
           routing.halt 500, { message: 'API server error' }.to_json
         end
 
-        # PUT api/v1/interviews/[interview_id]
-        routing.put do
-          # req_data = JSON.parse(routing.body.read)
+        # POST api/v1/interviews/[interview_id]
+        routing.post do
           routing.halt(403, UNAUTH_MSG) unless @auth_account
+
+          new_data = JSON.parse(routing.body.read)
           interview = EditInterview.call(
             auth: @auth,
+            new_interv: new_data,
             inter_id: interview_id
           )
 
           { message: "#{interview.position} edited.",
             data: interview }.to_json
-        rescue DeleteInterview::ForbiddenError => e
+        rescue EditInterview::ForbiddenError => e
           routing.halt 403, { message: e.message }.to_json
         rescue StandardError
           routing.halt 500, { message: 'API server error' }.to_json

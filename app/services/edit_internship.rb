@@ -10,13 +10,13 @@ module ISSInternship
       end
     end
 
-    def self.call(auth:, inter_id:)
+    def self.call(auth:, new_intern:, inter_id:)
       internship = Internship.first(id: inter_id)
 
       policy = InternshipPolicy.new(auth[:account], internship, auth[:scope])
       raise ForbiddenError unless policy.can_edit?
 
-      Internship.update(internship.to_h[:attributes])
+      internship.update(new_intern.to_h)
       internship
     end
   end

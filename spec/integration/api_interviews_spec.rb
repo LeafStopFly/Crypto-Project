@@ -77,13 +77,12 @@ describe 'Test Interview Handling' do
 
     it 'SAD: should return error if unknown interview requested' do
       header 'AUTHORIZATION', auth_header(@account_data)
-      get "/api/v1/interviews/foobar"
+      get '/api/v1/interviews/foobar'
 
       _(last_response.status).must_equal 404
     end
 
     it 'SECURITY: should prevent basic SQL injection targeting IDs' do
-
       @account.add_owned_interview(DATA[:interviews][0])
       @account.add_owned_interview(DATA[:interviews][1])
 
@@ -92,7 +91,7 @@ describe 'Test Interview Handling' do
 
       # deliberately not reporting error -- don't give attacker information
       _(last_response.status).must_equal 404
-      _(last_response.body['data']).must_be_nil 
+      _(last_response.body['data']).must_be_nil
     end
   end
 
@@ -103,7 +102,7 @@ describe 'Test Interview Handling' do
 
     it 'HAPPY: should be able to create new interviews' do
       header 'AUTHORIZATION', auth_header(@account_data)
-      post "api/v1/interviews", @interv_data.to_json
+      post 'api/v1/interviews', @interv_data.to_json
       _(last_response.status).must_equal 201
       _(last_response.header['Location'].size).must_be :>, 0
 
@@ -128,7 +127,7 @@ describe 'Test Interview Handling' do
       bad_data = @interv_data.clone
       bad_data['created_at'] = '1900-01-01'
       header 'AUTHORIZATION', auth_header(@account_data)
-      post "api/v1/interviews", bad_data.to_json
+      post 'api/v1/interviews', bad_data.to_json
 
       _(last_response.status).must_equal 400
       _(last_response.header['Location']).must_be_nil
