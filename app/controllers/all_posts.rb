@@ -9,8 +9,14 @@ module ISSInternship
     # for homepage internships & interviews
     route('all_internships') do |routing|
       routing.get do
-        internships = Internship.all
-        JSON.pretty_generate(data: internships)
+        if routing.params == {}
+          internships = Internship.all
+          JSON.pretty_generate(data: internships)
+        else
+          # GET /all_internships?iss_module=xx
+          internships = Internship.where(iss_module: routing.params['iss_module']).all
+          JSON.pretty_generate(data: internships)
+        end
       rescue StandardError
         routing.halt 404, { message: 'Could not find internships' }.to_json
       end
@@ -18,8 +24,14 @@ module ISSInternship
 
     route('all_interviews') do |routing|
       routing.get do
-        interviews = Interview.all
-        JSON.pretty_generate(data: interviews)
+        if routing.params == {}
+          interviews = Interview.all
+          JSON.pretty_generate(data: interviews)
+        else
+          # GET /all_interviews?iss_module=xx
+          interviews = Interview.where(iss_module: routing.params['iss_module']).all
+          JSON.pretty_generate(data: interviews)
+        end
       rescue StandardError
         routing.halt 404, { message: 'Could not find interviews' }.to_json
       end
