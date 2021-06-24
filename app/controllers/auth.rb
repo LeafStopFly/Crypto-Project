@@ -50,6 +50,23 @@ module ISSInternship
         puts e.backtrace
         routing.halt 400
       end
+
+      # POST api/v1/auth/resetpwd
+      routing.on 'resetpwd' do
+        routing.post do
+          VerifyResetPassword.new(@request_data).call
+
+          response.status = 202
+          { message: 'Verification email sent' }.to_json
+        rescue VerifyResetPassword::InvalidResetPassword => e
+          puts [e.class, e.message].join ': '
+          routing.halt 400, { message: e.message }.to_json
+        rescue StandardError => e
+          puts "ERROR VERIFYING REGISTRATION: #{e.inspect}"
+          puts e.message
+          routing.halt 500
+        end
+      end
     end
   end
 end
