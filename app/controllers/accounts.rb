@@ -27,7 +27,7 @@ module ISSInternship
           routing.halt 500, { message: 'Error creating account' }.to_json
         end
       end
-      
+
       routing.on String do |username|
         routing.halt(403, UNAUTH_MSG) unless @auth_account
 

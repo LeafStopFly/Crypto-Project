@@ -16,7 +16,6 @@ module ISSInternship
       policy = InterviewPolicy.new(auth[:account], interview, auth[:scope])
       raise ForbiddenError unless policy.can_delete?
 
-      # auth[:account].remove_owned_interview(interview)
       interview.destroy
       interview
     end

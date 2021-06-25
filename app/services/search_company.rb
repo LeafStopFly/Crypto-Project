@@ -6,12 +6,11 @@ module ISSInternship
     def self.call(input)
       db_company = company_in_database(input)
 
-      company =
-        if db_company
-          db_company
-        else
-          new_company = company_in_api(input)
-        end
+      if db_company
+        db_company
+      else
+        company_in_api(input)
+      end
     end
 
     # Support methods
