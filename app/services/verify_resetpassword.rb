@@ -3,9 +3,9 @@
 require 'http'
 
 module ISSInternship
-  ## Send email verfification email
+  # Send email verfification email
   # params:
-  #   - registration: hash with keys :username :email :verification_url
+  # - registration: hash with keys :username :email :verification_url
   class VerifyResetPassword
     # Error for invalid registration details
     class InvalidResetPassword < StandardError; end
@@ -22,6 +22,7 @@ module ISSInternship
 
     def call
       raise(InvalidResetPassword, 'Account does not exist') unless email_exist?
+
       send_email_verification
     end
 
@@ -45,10 +46,8 @@ module ISSInternship
         }],
         from: { 'email' => from_email },
         subject: 'ISS Internship Reset Password Verification',
-        content: [
-        { type: 'text/html',
-          value: html_email }
-        ]
+        content: [{ type: 'text/html',
+                    value: html_email }]
       }
     end
 
@@ -58,7 +57,7 @@ module ISSInternship
     rescue StandardError => e
       puts "EMAIL ERROR: #{e.inspect}"
       raise(InvalidResetPassword,
-           'Could not send reset password email; please check email address')
+            'Could not send reset password email; please check email address')
     end
   end
 end

@@ -87,7 +87,7 @@ describe 'Test Interview Handling' do
       @account.add_owned_interview(DATA[:interviews][1])
 
       header 'AUTHORIZATION', auth_header(@account_data)
-      get 'api/v1/internships/2%20or%20id%3E0'
+      get 'api/v1/interviews/2%20or%20id%3E0'
 
       # deliberately not reporting error -- don't give attacker information
       _(last_response.status).must_equal 404
@@ -121,6 +121,8 @@ describe 'Test Interview Handling' do
       _(created['waiting_result_time']).must_equal @interv_data['waiting_result_time']
       _(created['advice']).must_equal @interv_data['advice']
       _(created['iss_module']).must_equal @interv_data['iss_module']
+      _(created['company_name']).must_equal @interv_data['company_name']
+      _(created['non_anonymous']).must_equal @interv_data['non_anonymous']
     end
 
     it 'SECURITY: should not create documents with mass assignment' do
@@ -131,6 +133,51 @@ describe 'Test Interview Handling' do
 
       _(last_response.status).must_equal 400
       _(last_response.header['Location']).must_be_nil
+    end
+  end
+
+  describe 'Deleting Interviews' do
+    before do
+      @interv_data = @account.add_owned_interview(DATA[:interviews][1])
+      @id = @interv_data.id
+    end
+
+    it 'HAPPY: should be able to delete interview' do
+      header 'AUTHORIZATION', auth_header(@account_data)
+      delete "api/v1/interviews/#{@id}", @interv_data.to_json
+      _(last_response.status).must_equal 200
+
+      deleted = JSON.parse(last_response.body)['data']['attributes']
+
+      _(deleted['id']).must_equal @id
+      _(deleted['position']).must_equal @interv_data[:position]
+      _(deleted['time']).must_equal @interv_data[:time]
+      _(deleted['interview_location']).must_equal @interv_data[:interview_location]
+      _(deleted['level']).must_equal @interv_data[:level]
+      _(deleted['recruit_source']).must_equal @interv_data[:recruit_source]
+      _(deleted['rating']).must_equal @interv_data[:rating]
+      _(deleted['result']).must_equal @interv_data[:result]
+      _(deleted['waiting_result_time']).must_equal @interv_data[:waiting_result_time]
+      _(deleted['iss_module']).must_equal @interv_data[:iss_module]
+      _(deleted['company_name']).must_equal @interv_data[:company_name]
+      _(deleted['non_anonymous']).must_equal @interv_data[:non_anonymous]
+    end
+
+    it 'BAD AUTHORIZATION: should not process without authorization' do
+      delete "api/v1/interviews/#{@id}", @interv_data.to_json
+      _(last_response.status).must_equal 403
+
+      result = JSON.parse last_response.body
+      _(result['data']).must_be_nil
+    end
+
+    it 'BAD AUTHORIZATION: should not process with wrong authorization' do
+      header 'AUTHORIZATION', auth_header(@wrong_account_data)
+      delete "api/v1/interviews/#{@id}", @interv_data.to_json
+      _(last_response.status).must_equal 403
+
+      result = JSON.parse last_response.body
+      _(result['data']).must_be_nil
     end
   end
 end

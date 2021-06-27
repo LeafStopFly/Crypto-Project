@@ -15,11 +15,11 @@ module ISSInternship
 
         # GET api/v1/internships/[internship_id]
         routing.get do
-          # internship = GetInternshipQuery.call(
-          #   auth: @auth, internship: @req_internship
-          # )
+          internship = GetInternshipQuery.call(
+            auth: @auth, internship: @req_internship
+          )
 
-          { data: @req_internship }.to_json
+          { data: internship }.to_json
         rescue GetInternshipQuery::ForbiddenError => e
           routing.halt 403, { message: e.message }.to_json
         rescue GetInternshipQuery::NotFoundError => e
@@ -29,39 +29,40 @@ module ISSInternship
           routing.halt 500, { message: 'API server error' }.to_json
         end
 
-        # POST api/v1/internships/[internship_id]
-        routing.post do
+        routing.is do
           routing.halt(403, UNAUTH_MSG) unless @auth_account
 
-          new_data = JSON.parse(routing.body.read)
-          internship = EditInternship.call(
-            auth: @auth,
-            new_intern: new_data,
-            inter_id: internship_id
-          )
+          # POST api/v1/internships/[internship_id]
+          routing.post do
+            new_data = JSON.parse(routing.body.read)
+            internship = EditInternship.call(
+              auth: @auth,
+              new_intern: new_data,
+              inter_id: internship_id
+            )
 
-          { message: "#{internship.title} edited.",
-            data: internship }.to_json
-        rescue EditInternship::ForbiddenError => e
-          routing.halt 403, { message: e.message }.to_json
-        rescue StandardError
-          routing.halt 500, { message: 'API server error' }.to_json
-        end
+            { message: "#{internship.title} edited.",
+              data: internship }.to_json
+          rescue EditInternship::ForbiddenError => e
+            routing.halt 403, { message: e.message }.to_json
+          rescue StandardError
+            routing.halt 500, { message: 'API server error' }.to_json
+          end
 
-        # DELETE api/v1/internships/[internship_id]
-        routing.delete do
-          
-          internship = DeleteInternship.call(
-            auth: @auth,
-            inter_id: internship_id
-          )
+          # DELETE api/v1/internships/[internship_id]
+          routing.delete do
+            internship = DeleteInternship.call(
+              auth: @auth,
+              inter_id: internship_id
+            )
 
-          { message: "#{internship.title} deleted.",
-            data: internship }.to_json
-        rescue DeleteInternship::ForbiddenError => e
-          routing.halt 403, { message: e.message }.to_json
-        rescue StandardError
-          routing.halt 500, { message: 'API server error' }.to_json
+            { message: "#{internship.title} deleted.",
+              data: internship }.to_json
+          rescue DeleteInternship::ForbiddenError => e
+            routing.halt 403, { message: e.message }.to_json
+          rescue StandardError
+            routing.halt 500, { message: 'API server error' }.to_json
+          end
         end
       end
 

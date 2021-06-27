@@ -132,4 +132,47 @@ describe 'Test Internship Handling' do
       _(last_response.header['Location']).must_be_nil
     end
   end
+
+  describe 'Deleting Internships' do
+    before do
+      @intern_data = @account.add_owned_internship(DATA[:internships][1])
+      @id = @intern_data.id
+    end
+
+    it 'HAPPY: should be able to delete internship' do
+      header 'AUTHORIZATION', auth_header(@account_data)
+      delete "api/v1/internships/#{@id}", @intern_data.to_json
+      _(last_response.status).must_equal 200
+
+      deleted = JSON.parse(last_response.body)['data']['attributes']
+
+      _(deleted['id']).must_equal @id
+      _(deleted['title']).must_equal @intern_data[:title]
+      _(deleted['year']).must_equal @intern_data[:year]
+      _(deleted['period']).must_equal @intern_data[:period]
+      _(deleted['salary']).must_equal @intern_data[:salary]
+      _(deleted['recruit_source']).must_equal @intern_data[:recruit_source]
+      _(deleted['rating']).must_equal @intern_data[:rating]
+      _(deleted['iss_module']).must_equal @intern_data[:iss_module]
+      _(deleted['company_name']).must_equal @intern_data[:company_name]
+      _(deleted['non_anonymous']).must_equal @intern_data[:non_anonymous]
+    end
+
+    it 'BAD AUTHORIZATION: should not process without authorization' do
+      delete "api/v1/internships/#{@id}", @intern_data.to_json
+      _(last_response.status).must_equal 403
+
+      result = JSON.parse last_response.body
+      _(result['data']).must_be_nil
+    end
+
+    it 'BAD AUTHORIZATION: should not process with wrong authorization' do
+      header 'AUTHORIZATION', auth_header(@wrong_account_data)
+      delete "api/v1/internships/#{@id}", @intern_data.to_json
+      _(last_response.status).must_equal 403
+
+      result = JSON.parse last_response.body
+      _(result['data']).must_be_nil
+    end
+  end
 end

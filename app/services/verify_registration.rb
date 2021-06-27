@@ -3,7 +3,7 @@
 require 'http'
 
 module ISSInternship
-  ## Send email verfification email
+  # Send email verfification email
   # params:
   #   - registration: hash with keys :username :email :verification_url
   class VerifyRegistration
@@ -22,6 +22,7 @@ module ISSInternship
 
     def call
       raise(InvalidRegistration, 'Username exists') unless username_available?
+
       raise(InvalidRegistration, 'Email already used') unless email_available?
 
       send_email_verification
@@ -52,10 +53,8 @@ module ISSInternship
         }],
         from: { 'email' => from_email },
         subject: 'ISS Internship Credent Registration Verification',
-        content: [
-          { type: 'text/html',
-            value: html_email }
-        ]
+        content: [{ type: 'text/html',
+                    value: html_email }]
       }
     end
 

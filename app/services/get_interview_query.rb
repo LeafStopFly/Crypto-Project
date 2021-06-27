@@ -3,13 +3,6 @@
 module ISSInternship
   # View an existing interview
   class GetInterviewQuery
-    # Error for someone is not allowed to access
-    class ForbiddenError < StandardError
-      def message
-        'You are not allowed to access that interview'
-      end
-    end
-
     # Error for cannot find a interview
     class NotFoundError < StandardError
       def message
@@ -19,11 +12,15 @@ module ISSInternship
 
     def self.call(auth:, interview:)
       raise NotFoundError unless interview
+      
+      if auth.nil?
+        interview
+      else
+        policy = InterviewPolicy.new(auth[:account], interview, auth[:scope])
+        # raise ForbiddenError unless policy.can_view?
 
-      policy = InterviewPolicy.new(auth[:account], interview, auth[:scope])
-      # raise ForbiddenError unless policy.can_view?
-
-      interview.full_details.merge(policies: policy.summary)
+        interview.full_details.merge(policies: policy.summary)
+      end
     end
   end
 end
