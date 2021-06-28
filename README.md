@@ -1,31 +1,36 @@
+![](https://img.shields.io/badge/Ruby-3.0.1-green)
 # Intern Platform
 API to store and retrieve confidential development files (configuration, credentials)
 ## Routes
 All routes return Json
+### Root
 - GET `/`: Root route shows if Web API is running
+### Account
 - GET `api/v1/accounts/[username]`: Get account details
 - POST `api/v1/accounts`: Create a new account
 
-
+### Company
 - GET `api/v1/companies/[company_id]/internships`: Get list of all that company's internshps
 - GET `api/v1/companies/[company_id]/interviews`: Get list of all that company's interviews
 - GET `api/v1/companies/[company_id]`: Get a company information
 - GET `api/v1/companies`: Get list of all companies
 - POST `api/v1/companies`: Create an new company
 
-
+### Internship
 - GET `api/v1/internships/[internship_id]`: Get an internship reactionary
-- PUT `api/v1/internships/[internship_id]`: Update an internship reactionary
+- POST `api/v1/internships/[internship_id]`: Update an internship reactionary
 - DELETE `api/v1/internships/[internship_id]`: Delete an internship reactionary
-- GET `api/v1/internships/all`: Get list of all internships
+- GET `api/v1/all_internships`: Get list of all internships
+- GET `api/v1/all_internships?iss_module=[iss_module]`: Search all internships by iss module
 - GET `api/v1/internships`: Get list of all that owner internships
 - POST `api/v1/internships`: Create an internship reactionary
 
-
+### Interview
 - GET `api/v1/interviews/[interview_id]`: Get an interview reactionary
-- PUT `api/v1/interviews/[interview_id]`: Update an interview reactionary
+- POST `api/v1/interviews/[interview_id]`: Update an interview reactionary
 - DELETE `api/v1/interviews/[interview_id]`: Delete an interview reactionary
 - GET `api/v1/interviews/all`: Get list of all interviews
+- GET `api/v1/all_interviews?iss_module=[iss_module]`: Search all interviews by iss module
 - GET `api/v1/interviews`: Get list of all that owner interviews
 - POST `api/v1/interviews`: Create an interview reactionary
 
